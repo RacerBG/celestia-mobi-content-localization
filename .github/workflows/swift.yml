@@ -108,6 +108,17 @@ jobs:
         .build/debug/SynchronizerApp guide-content Guide localizedHTMLReferences data --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID
         git add guide-content
 
+    - name: Synchronize (Featured Item Titles)
+      if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      env:
+        CLOUDKIT_KEY_ID: ${{ secrets.CLOUDKIT_KEY_ID }}
+      run: |
+        rm -rf featured-item-titles
+        mkdir -p featured-item-titles/en.lproj
+        touch featured-item-titles/en.lproj/Localizable.strings
+        .build/debug/SynchronizerApp featured-item-titles FeaturedItem localizedNames --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID
+        git add featured-item-titles
+
     - name: Commit
       if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
       run: |
@@ -252,3 +263,24 @@ jobs:
         git reset --hard HEAD^
         .build/debug/UploaderApp guide-content new-guide-content localizedHTMLReferences data --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID
         git reset --hard $CURRENT_COMMIT
+
+    - name: Upload (Featured Item Titles)
+      if: github.event_name == 'push'
+      env:
+        CLOUDKIT_KEY_ID: ${{ secrets.CLOUDKIT_KEY_ID }}
+      run: |
+        if [ "`git show -s --format='%an'`" = "runner" ]; then
+          echo "Ignore runner commit"
+          exit 0
+        fi
+        if [ ! -d featured-item-titles ]; then
+          echo "Featured item titles have not been synchronized yet"
+          exit 0
+        fi
+        OLD_TITLES=$RUNNER_TEMP/old-featured-item-titles
+        mkdir -p "$OLD_TITLES/en.lproj"
+        touch "$OLD_TITLES/en.lproj/Localizable.strings"
+        if git cat-file -e HEAD^:featured-item-titles; then
+          git archive HEAD^ featured-item-titles | tar -x --strip-components=1 -C "$OLD_TITLES"
+        fi
+        .build/debug/UploaderApp "$OLD_TITLES" featured-item-titles localizedNames --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID
