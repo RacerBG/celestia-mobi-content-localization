@@ -8,6 +8,8 @@ For example: `addon-title` folder includes localization for titles for add-ons.
 
 Featured item titles are synchronized into `featured-item-titles` on scheduled or manually dispatched workflow runs. Entries use the FeaturedItem record ID, not the linked add-on ID. Translations are uploaded to the record's `localizedNames` field, including English.
 
+Guide subtitles are synchronized into `guide-subtitles` on scheduled or manually dispatched workflow runs. Entries use the Guide record ID. Translations are uploaded to the record's `localizedSubtitles` JSON dictionary, including English. Guides without subtitles are skipped.
+
 If the language you want to support is not in the folder yet. Create a folder for your language (for example, create `ja.lproj` folder for Japanese, and then create a file named `Localizable.strings` in `ja.lproj` folder). Look in `en.lproj/Localizable.strings` for the entries you want to localize, copy the entries to your `Localizable.strings` and translate.
 
 If the language you want to support is already in the folder. Open `Localizable.strings` directly in that folder, there should be a comment on each string that tells you the English word this entry. Localize the string and remove the leading `//` for the translated line.
