@@ -26,7 +26,7 @@
 //"4B4A6963-C463-CF47-81ED-B25AD3B864C4" = "NASA tests asteroid deflection with a kinetic impact";
 
 // English: First spacecraft 1 light-day from Earth
-//"5579479D-99E3-4802-A08A-2267AFD82416" = "First spacecraft 1 light-day from Earth";
+"5579479D-99E3-4802-A08A-2267AFD82416" = "首个距地球1光日的航天器";
 
 // English: First crewed Moon mission since 1972
 //"63B1B825-7FD1-42BF-8EF2-30A553A5364F" = "First crewed Moon mission since 1972";
@@ -56,7 +56,7 @@
 //"92DB1F10-899E-E5E4-D997-19EA8018AA8F" = "First image of the Milky Way's central black hole";
 
 // English: Farthest crewed flight from Earth
-"96BA8300-9631-4943-A33A-AD0D2E5AC410" = "Най-близката точка до Луната";
+//"96BA8300-9631-4943-A33A-AD0D2E5AC410" = "Farthest crewed flight from Earth";
 
 // English: Second uncrewed flight to the ISS ends successfully
 //"99D012D7-27E8-D664-48BB-18C03C082AF3" = "Second uncrewed flight to the ISS ends successfully";
@@ -74,7 +74,7 @@
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "4 astronauts chosen for a crewed lunar flyby";
 
 // English: Celestia has no affiliation with star-naming services
-//"CEBBED14-9BDB-EF17-02E8-C8503EB3AE03" = "Celestia has no affiliation with star-naming services";
+"CEBBED14-9BDB-EF17-02E8-C8503EB3AE03" = "Celestia 与恒星命名服务没有关联";
 
 // English: Views from the world's largest digital camera
 //"D05707AB-99FE-4693-A623-0DE1CA68DE85" = "Views from the world's largest digital camera";
@@ -86,7 +86,7 @@
 //"E1E38949-6C14-8FAE-BC25-61F0D44139CF" = "India's first Mars orbiter falls silent after 8 years";
 
 // English: First expansion module docks 13 hours after launch
-//"E3B6869A-9336-394D-7B60-B3CC1DF1E6D4" = "First expansion module docks 13 hours after launch";
+"E3B6869A-9336-394D-7B60-B3CC1DF1E6D4" = "首个扩展舱在发射13小时后完成对接";
 
 // English: 2024 RW₁ detected 14 hours before impact
 //"E5E18212-C38C-44E2-9BCB-03911D2B6561" = "2024 RW₁ detected 14 hours before impact";
