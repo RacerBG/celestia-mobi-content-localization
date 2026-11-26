@@ -34,6 +34,10 @@ public class Parser {
     public func parseFile(at path: String) throws -> [String: String] {
         let stringsFilePath = (path as NSString).appendingPathComponent("Localizable.strings")
         guard let dictionary = NSDictionary(contentsOfFile: stringsFilePath) as? [String: String] else {
+            if let contents = try? String(contentsOfFile: stringsFilePath, encoding: .utf8),
+               contents.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                return [:]
+            }
             throw ParserError.malformed
         }
         return dictionary
@@ -102,7 +106,7 @@ public class Parser {
                 if englishStrings[key] == nil { continue }
                 newStrings[key] = value
             }
-            if !newStrings.isEmpty {
+            if !newStrings.isEmpty || locale == "en" {
                 clearedStringsByLocale[locale] = newStrings
             }
         }
@@ -182,7 +186,7 @@ public class Parser {
     }
 
     public func convertToStringsByLocales(_ stringsByKeys: [String: [String: String]]) throws -> [String: [String: String]] {
-        var results = [String: [String: String]]()
+        var results = ["en": [String: String]()]
         for (key, strings) in stringsByKeys {
             var hasEnglishResource = false
             for (locale, string) in strings {

@@ -20,6 +20,10 @@ let package = Package(
                 .product(name: "AsyncRequest", package: "async-request"),
             ]
         ),
+        .testTarget(
+            name: "ParserTests",
+            dependencies: [.target(name: "Parser")]
+        ),
         .executableTarget(
             name: "UploaderApp",
             dependencies: [

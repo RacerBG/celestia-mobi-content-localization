@@ -26,6 +26,9 @@ jobs:
 
     - name: Build
       run: swift build -v
+
+    - name: Test
+      run: swift test
     
     - name: Synchronize (Category Names)
       if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
