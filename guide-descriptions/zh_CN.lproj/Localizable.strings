@@ -17,7 +17,7 @@
 //"12ECB7A0-B147-300D-1664-50EAEE3FDDFB" = "Week 29, 2022: Newest Addons of the Month";
 
 // English: Experience the universe in your browser. Explore a real-time, 3D simulation of our solar system and beyond with the web version of Celestia.
-//"13867212-3685-4D11-8068-B990C0C6EFFE" = "Experience the universe in your browser. Explore a real-time, 3D simulation of our solar system and beyond with the web version of Celestia.";
+"13867212-3685-4D11-8068-B990C0C6EFFE" = "在浏览器中体验宇宙。使用 Celestia 网页版，通过实时 3D 模拟探索太阳系及更遥远的宇宙。";
 
 // English: Week 17, 2025: Hubble Celebrates 35 Years in Orbit This Month
 //"14AED8EE-A9BD-49CC-8A8C-9A55E84063EF" = "Week 17, 2025: Hubble Celebrates 35 Years in Orbit This Month";
@@ -113,19 +113,19 @@
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "Week 11, 2022: Asteroid Discovered 2 Hours Before Earth Impact";
 
 // English: How to Navigate to Spacecraft that Don't Appear in Celestia?
-//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "How to Navigate to Spacecraft that Don't Appear in Celestia?";
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "如何前往 Celestia 中未显示的航天器？";
 
 // English: CELX Scripting Documentation
-//"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "CELX Scripting Documentation";
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "CELX 脚本文档";
 
 // English: Flight Mode
-//"7013117F-362E-7138-59BB-B9ED52ADECF1" = "Flight Mode";
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "飞行模式";
 
 // English: Week 12, 2023: Newest Add-ons of the Month
 //"716CB087-887B-ECFD-30DA-C1EDDAA3FF9E" = "Week 12, 2023: Newest Add-ons of the Month";
 
 // English: Game Controller
-//"72B827A7-7164-6A3E-2557-4C164E14E95C" = "Game Controller";
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "游戏控制器";
 
 // English: Week 51, 2022: Newest Addons of the Month
 //"7622F06B-4A57-0924-C6B1-A16B05631D15" = "Week 51, 2022: Newest Addons of the Month";
@@ -152,7 +152,7 @@
 //"89552EE4-AC68-DCAB-90B2-7D1FFB1133A4" = "What's new in Mobile Celestia 1.5.5";
 
 // English: This guide explains how to make an add-on for Celestia and some special notes.
-//"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "This guide explains how to make an add-on for Celestia and some special notes.";
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "本指南介绍如何为 Celestia 制作插件，并说明一些需要特别注意的事项。";
 
 // English: Week 20, 2022: The Milky Way's Central Black Hole Imaged for the First Time
 //"92DB1F10-899E-E5E4-D997-19EA8018AA8F" = "Week 20, 2022: The Milky Way's Central Black Hole Imaged for the First Time";
@@ -170,7 +170,7 @@
 //"9FC52362-A105-403D-9DDC-EC99C4C0B129" = "Celestia on Apple Vision Pro";
 
 // English: Scripts and URLs
-//"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "Scripts and URLs";
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "脚本和 URL";
 
 // English: Week 32, 2022: Newest Addons of the Week
 //"A2D50375-A087-68EE-DFF3-9A22FB470507" = "Week 32, 2022: Newest Addons of the Week";
@@ -191,13 +191,13 @@
 //"B9E7043E-8297-C307-3D20-A339992FC582" = "Cassini mission from launch to orbital insertion.";
 
 // English: Touch, Mouse, Keyboard and Gamepad/Joystick Controls
-//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Touch, Mouse, Keyboard and Gamepad/Joystick Controls";
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "触控、鼠标、键盘及游戏手柄／操纵杆操作";
 
 // English: Week 43, 2022: Ed Stone Retires as Voyager's Project Scientist after 50 Years
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Week 43, 2022: Ed Stone Retires as Voyager's Project Scientist after 50 Years";
 
 // English: Override Data Directory to Read from
-//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Override Data Directory to Read from";
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "更改读取数据所用的目录";
 
 // English: Week 14, 2023: The Crew of Artemis 2 is Officially Announced
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "Week 14, 2023: The Crew of Artemis 2 is Officially Announced";
@@ -239,4 +239,4 @@
 //"F43764E4-7E10-4B7F-990C-259DFF63A9BA" = "On the second week of May 2024, a series of coronal mass ejections and solar flares originating from a large sunspot group called AR3663, struck the Earth as a powerful geomagnetic storm, with the strongest one so far erupting on May 10th. As a result, it generated aurorae as far south as Florida, USA and as far north as Australia. It is the first G5-class geomagnetic storm observed since 2003 and possibly the strongest one on record since March 1989";
 
 // English: Experience the universe in your browser. Explore a real-time, 3D simulation of our solar system and beyond with the web version of Celestia.
-//"FFB76B69-1ADA-8F27-AD06-B0880F7EF43C" = "Experience the universe in your browser. Explore a real-time, 3D simulation of our solar system and beyond with the web version of Celestia.";
+"FFB76B69-1ADA-8F27-AD06-B0880F7EF43C" = "在浏览器中体验宇宙。使用 Celestia 网页版，通过实时 3D 模拟探索太阳系及更遥远的宇宙。";
