@@ -4,6 +4,12 @@
 // English: Discoveries span 3,759 star systems
 //"06720596-C2D4-B873-D446-70D48B3E7F2C" = "Discoveries span 3,759 star systems";
 
+// English: Write CEL and CELX scripts to run in Celestia
+//"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "Write CEL and CELX scripts to run in Celestia";
+
+// English: Explore with the full Celestia data set in your browser
+//"13867212-3685-4D11-8068-B990C0C6EFFE" = "Explore with the full Celestia data set in your browser";
+
 // English: Still exploring after 5 shuttle servicing missions
 //"14AED8EE-A9BD-49CC-8A8C-9A55E84063EF" = "Still exploring after 5 shuttle servicing missions";
 
@@ -43,6 +49,15 @@
 // English: Set the date to the mission's active period
 //"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "Set the date to the mission's active period";
 
+// English: Lua-based scripting API reference for Celestia
+//"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "Lua-based scripting API reference for Celestia";
+
+// English: Choose how you move relative to objects
+//"7013117F-362E-7138-59BB-B9ED52ADECF1" = "Choose how you move relative to objects";
+
+// English: Connect a gamepad and customize its controls
+//"72B827A7-7164-6A3E-2557-4C164E14E95C" = "Connect a gamepad and customize its controls";
+
 // English: Double gravity assist on the way to Jupiter
 //"7BC89DB4-893A-45A3-9B27-B24C83BD85FD" = "Double gravity assist on the way to Jupiter";
 
@@ -55,6 +70,9 @@
 // English: The third known interstellar object in the Solar System
 //"85C0B69E-FBFC-4A58-9B11-1BC666ED1C7D" = "The third known interstellar object in the Solar System";
 
+// English: Create, test, and share your own Celestia add-on
+//"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "Create, test, and share your own Celestia add-on";
+
 // English: First image of the Milky Way's central black hole
 //"92DB1F10-899E-E5E4-D997-19EA8018AA8F" = "First image of the Milky Way's central black hole";
 
@@ -63,6 +81,9 @@
 
 // English: Second uncrewed flight to the ISS ends successfully
 //"99D012D7-27E8-D664-48BB-18C03C082AF3" = "Second uncrewed flight to the ISS ends successfully";
+
+// English: Run scripts, save bookmarks, and open Celestia links
+//"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "Run scripts, save bookmarks, and open Celestia links";
 
 // English: IAU invites names for 20 exoplanetary systems
 //"B0B3F307-A97A-9012-08B4-C2F19B20AF8B" = "IAU invites names for 20 exoplanetary systems";
@@ -88,6 +109,9 @@
 // English: Views from the world's largest digital camera
 //"D05707AB-99FE-4693-A623-0DE1CA68DE85" = "Views from the world's largest digital camera";
 
+// English: Install add-ons and scripts on your device
+//"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "Install add-ons and scripts on your device";
+
 // English: A new view of galaxies, nebulae and exoplanets
 //"D631521A-E9AA-1E31-4101-8F6E10C239BB" = "A new view of galaxies, nebulae and exoplanets";
 
@@ -105,3 +129,6 @@
 
 // English: First G5 geomagnetic storm since 2003
 //"F43764E4-7E10-4B7F-990C-259DFF63A9BA" = "First G5 geomagnetic storm since 2003";
+
+// English: Explore space in your browser with a smaller download
+//"FFB76B69-1ADA-8F27-AD06-B0880F7EF43C" = "Explore space in your browser with a smaller download";
