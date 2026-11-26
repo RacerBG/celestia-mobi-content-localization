@@ -40,6 +40,9 @@
 // English: 2022 EB5 discovered 2 hours before impact near Iceland
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "2022 EB5 discovered 2 hours before impact near Iceland";
 
+// English: Set the date to the mission's active period
+//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "Set the date to the mission's active period";
+
 // English: Double gravity assist on the way to Jupiter
 //"7BC89DB4-893A-45A3-9B27-B24C83BD85FD" = "Double gravity assist on the way to Jupiter";
 
@@ -67,8 +70,14 @@
 // English: Uncrewed replacement will extend the ISS stay to a year
 //"B8EF9369-FBDA-9E2A-5D67-46DED6B7BDFA" = "Uncrewed replacement will extend the ISS stay to a year";
 
+// English: Touch, mouse, keyboard, gamepad, and joystick
+//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Touch, mouse, keyboard, gamepad, and joystick";
+
 // English: Voyager's project scientist steps down after 50 years
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Voyager's project scientist steps down after 50 years";
+
+// English: Use your own Celestia data and configuration files
+//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Use your own Celestia data and configuration files";
 
 // English: 4 astronauts chosen for a crewed lunar flyby
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "4 astronauts chosen for a crewed lunar flyby";

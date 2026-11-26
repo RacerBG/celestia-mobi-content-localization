@@ -115,8 +115,8 @@
 // English: Asteroid Found Before Impact
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "Asteroid Found Before Impact";
 
-// English: How to Navigate to Spacecraft that Don't Appear in Celestia?
-//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "How to Navigate to Spacecraft that Don't Appear in Celestia?";
+// English: View Missing Spacecraft
+//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "View Missing Spacecraft";
 
 // English: CELX Scripting Documentation
 //"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "CELX Scripting Documentation";
@@ -193,14 +193,14 @@
 // English: Cassini Mission
 //"B9E7043E-8297-C307-3D20-A339992FC582" = "Cassini Mission";
 
-// English: Touch, Mouse, Keyboard and Gamepad/Joystick Controls
-//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Touch, Mouse, Keyboard and Gamepad/Joystick Controls";
+// English: Controls Reference
+//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Controls Reference";
 
 // English: Ed Stone Retires
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Ed Stone Retires";
 
-// English: Override Data Directory to Read from
-//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Override Data Directory to Read from";
+// English: Custom Data Directory
+//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Custom Data Directory";
 
 // English: Artemis II Crew Revealed
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "Artemis II Crew Revealed";
