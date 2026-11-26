@@ -1,30 +1,31 @@
-<style>
-  .small-button-outline {
-   padding: 3px 8px;
-  } 
-  .addon-submission-text-input {
-    padding: 4px 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .theme-dark .addon-submission-text-input {
-    border: 1px solid #333;
-  }
-  .addon-submission-label {
-    display: inline-block;
-  }
-</style>
 <script type="text/javascript" src="{0}"></script>
 <p>Please fill in all fields marked as required. Fill in optional fields only when absolutely necessary. Your add-on submission will be rejected if you fill in an optional field without an absolute need.</p>
-<div id="github-sign-in-button" style="display:none;"><button class="button-filled" id="github-sign-in-button-button" style="margin-top:0.4em;">Sign in with GitHub</button></div>
-<div id="addon-submission-area"><div id="addon-submission-form"></div><br><button id="addon-submit-button" disabled class="button-filled">Submit</button><p id="addon-submission-status" style="display:none;margin-top:0.5em;"></p><progress id="addon-submission-progress" value="0" max="100" style="display:none;width:100%;margin-top:0.5em;"></progress></div>
-<p id="error-information-text" style="display:none;margin-top:0.5em;"></p>
+<div id="github-sign-in-button" class="action-row" style="display:none;"><button class="button-filled" id="github-sign-in-button-button">Sign in with GitHub</button></div>
+<div id="addon-submission-area" class="stack"><div id="addon-submission-form" class="form-fields stack"></div><div class="action-row"><button id="addon-submit-button" disabled class="button-filled">Submit</button></div><p id="addon-submission-status" class="feedback feedback-info" role="status" aria-live="polite" style="display:none;"></p><progress id="addon-submission-progress" class="form-progress" value="0" max="100" aria-label="Upload progress" style="display:none;"></progress></div>
+<p id="error-information-text" class="feedback feedback-error" role="alert" style="display:none;"></p>
 <script>"use strict";</script>
 <script>CelestiaCloudKitManager = {};</script>
 <script>
 CelestiaCloudKitManager.page = (function() {
   var self = {};
   self.authorCount = 0;
+  self.setStatusKind = function(kind) {
+    document.getElementById('addon-submission-status').className = `feedback feedback-${kind}`;
+  };
+  self.createListIcon = function(add) {
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute('focusable', 'false');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', add ? 'M12 5v14M5 12h14' : 'M5 12h14');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-linecap', 'round');
+    icon.appendChild(path);
+    return icon;
+  };
   self.showErrorText = function(text) {
     const errorElement = document.getElementById('error-information-text');
     errorElement.style.display = 'block';
@@ -101,6 +102,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
   const submissionStatus = document.getElementById('addon-submission-status');
   const submissionProgress = document.getElementById('addon-submission-progress');
   async function uploadZip() {
+    CelestiaCloudKitManager.page.hideError();
     let zip = new JSZip();
     for (var i = 0; i < submissionElements.length; i++) {
       const element = submissionElements[i];
@@ -210,6 +212,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
       }
     }
     submitButton.disabled = true;
+    CelestiaCloudKitManager.page.setStatusKind('info');
     submissionStatus.style.display = 'block';
     submissionStatus.innerText = 'Generating zip...';
     zip.generateAsync({ type: "blob" }).then(async function(content) {
@@ -280,11 +283,12 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
   for (var i = 0; i < submissionElements.length; i++) {
     const controls = [];
     const element = submissionElements[i];
+    const fieldGroup = document.createElement('div');
+    fieldGroup.classList.add('field-group');
     const label = document.createElement('label');
-    label.classList.add('addon-submission-label');
-    label.style.marginTop = '0.5em';
-    label.style.marginRight = '0.4em';
-    label.for = element.elementName;
+    label.classList.add('form-label');
+    label.id = `${element.elementName}-label`;
+    label.htmlFor = element.elementName;
     const labelContent = document.createTextNode(`${element.display}:`);
     label.appendChild(labelContent);
     controls.push(label);
@@ -293,7 +297,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'reference':
     case 'int':
       var input = document.createElement('input');
-      input.classList.add('addon-submission-text-input');
+      input.classList.add('form-control');
       if (element.type == 'int') {
         input.type = 'number';
         input.step = '1';
@@ -307,6 +311,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'reference-select':
     case 'text-select':
       var input = document.createElement('select');
+      input.classList.add('form-control');
       input.id = element.elementName;
       input.name = element.elementName;
       for (var j = 0; j < element.values.length; j++) {
@@ -320,10 +325,8 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
       break;
     case 'long-text':
       var input = document.createElement('textarea');
-      input.classList.add('addon-submission-text-input');
+      input.classList.add('form-control');
       input.style.resize = 'none';
-      input.style.width = '100%';
-      input.style.marginTop = '0.2em';
       input.id = element.elementName;
       input.name = element.elementName;
       input.rows = '4';
@@ -332,28 +335,29 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'short-text-list':
     case 'long-text-list':
       const container = document.createElement('div');
+      container.classList.add('form-list');
+      container.setAttribute('role', 'group');
+      container.setAttribute('aria-labelledby', label.id);
       container.id = element.elementName;
       container.name = element.elementName;
       const addButton = document.createElement('button');
-      addButton.classList.add('button-outline', 'small-button-outline');
-      addButton.style.marginTop = '0.2em';
+      addButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+      addButton.type = 'button';
+      addButton.setAttribute('aria-label', `Add ${element.display}`);
       addButton.id = `${element.elementName}-plus`;
       addButton.name = `${element.elementName}-plus`;
-      addButton.appendChild(document.createTextNode('+'));
+      addButton.appendChild(CelestiaCloudKitManager.page.createListIcon(true));
       addButton.onclick = function() {
         var div = document.createElement('div');
-        div.style.width = '100%';
-        div.style.marginTop = '0.2em';
-        if (element.type == 'long-text-list') {
-          div.style.display = 'flex';
-        }
+        div.classList.add('action-row');
         var minusButton = document.createElement('button');
+        minusButton.type = 'button';
+        minusButton.setAttribute('aria-label', `Remove ${element.display}`);
         var baseName = `${element.elementName}${container.children.length - 1}`;
         minusButton.id = `${baseName}-minus`;
         minusButton.name = `${baseName}-minus`;
-        minusButton.style.marginLeft = '0.5em';
-        minusButton.classList.add('button-outline', 'small-button-outline');
-        minusButton.appendChild(document.createTextNode('-'));
+        minusButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+        minusButton.appendChild(CelestiaCloudKitManager.page.createListIcon(false));
         minusButton.onclick = function() {
           container.removeChild(div);
           for (var i = 0; i < container.children.length - 1; i++) {
@@ -369,16 +373,19 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
         };
         if (element.type == 'long-text-list') {
           var newInput =  document.createElement('textarea')
-          newInput.classList.add('addon-submission-text-input');
+          newInput.classList.add('form-control');
           newInput.style.resize = 'none';
-          newInput.style.flex = '1';
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
           newInput.rows = '4';
           newInput.id = baseName;
           newInput.name = baseName;
           div.appendChild(newInput);
         } else {
           var newInput = document.createElement('input');
-          newInput.classList.add('addon-submission-text-input');
+          newInput.classList.add('form-control');
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
           newInput.type = 'text';
           newInput.id = baseName;
           newInput.name = baseName;
@@ -393,6 +400,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'date':
       var input = document.createElement('input');
       input.type = 'date';
+      input.classList.add('form-control');
       input.id = element.elementName;
       input.name = element.elementName;
       controls.push(input);
@@ -400,6 +408,8 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'checkbox':
       var input = document.createElement('input');
       input.type = 'checkbox';
+      input.classList.add('form-check');
+      fieldGroup.classList.add('field-group-check');
       input.id = element.elementName;
       input.name = element.elementName;
       controls.push(input);
@@ -408,6 +418,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
     case 'file-list':
       var input = document.createElement('input');
       input.type = 'file';
+      input.classList.add('form-file');
       if (element.type == 'file-list') {
         input.multiple = true;
       }
@@ -419,19 +430,19 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
       break;
     }
     if (element.hint) {
-      const hintElement = document.createElement('i');
-      hintElement.appendChild(document.createTextNode(element.hint));
-      hintElement.classList.add('text-secondary-size', 'text-secondary-color');
       const p = document.createElement('p');
-      p.appendChild(hintElement);
+      p.id = `${element.elementName}-hint`;
+      p.classList.add('form-hint');
+      p.appendChild(document.createTextNode(element.hint));
+      const field = controls.find(control => control.id === element.elementName);
+      if (field) field.setAttribute('aria-describedby', p.id);
       controls.push(p);
-    } else if (!["short-text-list", "long-text-list"].includes(submissionElements[i - 1].type)) {
-      controls.push(document.createElement('br'));
     }
 
     for (var j = 0; j < controls.length; j++) {
-      submissionForm.appendChild(controls[j]);
+      fieldGroup.appendChild(controls[j]);
     }
+    submissionForm.appendChild(fieldGroup);
 
     if (element.targetCheckBox || element.targetSelect) {
       const checkboxes = [];
@@ -482,6 +493,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
         for (var j = 0; j < controls.length; j++) {
           controls[j].style.display = allSatisfy ? '' : 'none';
         }
+        fieldGroup.style.display = allSatisfy ? '' : 'none';
       }
 
       updateControlVisibility();
@@ -563,15 +575,18 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
   GitHubManager.submitByCreatePullRequest = async function(filename, content, submissionStatus) {
     const prTitle = prompt("Please enter title for your pull request", "Update add-on...");
     if (prTitle == null || prTitle == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
       submissionStatus.innerText = `Cancelled creating PR for ${filename}`;
       return;
     }
     const prBody = prompt("Please enter body for your pull request", "...");
     if (prBody == null || prBody == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
       submissionStatus.innerText = `Cancelled creating PR for ${filename}`;
       return;
     }
     if (!GitHubManager.octokit) {
+      CelestiaCloudKitManager.page.setStatusKind('error');
       console.error('GitHub is not logged in');
       submissionStatus.innerText = 'GitHub is not logged in';
       return;
@@ -595,6 +610,7 @@ CelestiaCloudKitManager.onDataFetched = function(categories) {
       ],
     })
     if (pr && pr.data && pr.data.number) {
+      CelestiaCloudKitManager.page.setStatusKind('success');
       submissionStatus.innerHTML = `Created pull request <a href="https://github.com/celestiamobile/celestia-addon-validator/pull/${pr.data.number}">here</a>`;
     } else {
       CelestiaCloudKitManager.page.showErrorText('Error creating pull request')
