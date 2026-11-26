@@ -1,0 +1,49 @@
+<p>Celestia 支援完整的資料自訂。你可以變更讀取資料的目錄。</p>
+<p>所有平台都需要先下載對應 Celestia 版本的資料目錄副本。</p>
+<ol>
+<li>在<a href="https://github.com/celestiamobile/Celestia/releases">這裡</a>下載與 App 版本對應的原始資料目錄。</li>
+<li>修改目錄內容和 celestia.cfg 檔案。</li>
+</ol>
+<p>接著……</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>將目錄複製到裝置上的 Android/data/space.celestia.mobilecelestia/files 或 Android/media/space.celestia.mobilecelestia 中。如有需要，請重新命名，避免與預設的 CelestiaResources 目錄同名。</li>
+<li>執行 Celestia，開啟設定 -&gt; 資料位置。</li>
+<li>選擇資料目錄（CelestiaResources）和設定檔（celestia.cfg）的位置。</li>
+<li>關閉 Celestia 並重新執行。</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS（Catalyst）</h3>
+<ol>
+<li>將目錄複製到裝置上的任意位置。</li>
+<li>執行 Celestia，開啟設定 -&gt; 資料位置。</li>
+<li>選擇資料目錄（CelestiaResources）和設定檔（celestia.cfg）的位置。</li>
+<li>關閉 Celestia 並重新執行。</li>
+</ol>
+<h3 id="macos-legacy-">macOS（舊版）</h3>
+<ol>
+<li>將目錄複製到裝置上的任意位置。</li>
+<li>執行 Celestia，在選單列選擇 Celestia -&gt; 變更設定檔。</li>
+<li>選擇資料目錄（CelestiaResources）和設定檔（celestia.cfg）的位置。</li>
+<li>點選「確認並重新啟動」。請注意，需要自行重新執行 App。</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows（Microsoft Store）</h3>
+<p class="not-apple">若使用 2.1.18.0 或更新版本，請依照以下步驟操作：</p>
+<ol class="not-apple">
+<li>將目錄複製到裝置上的任意位置。</li>
+<li>執行 Celestia，開啟檔案 -&gt; 設定 -&gt; 資料位置。</li>
+<li>選擇資料目錄（CelestiaResources）和設定檔（celestia.cfg）的位置。</li>
+<li>關閉 Celestia 並重新執行。</li>
+</ol>
+<p class="not-apple">更早版本的操作方式：</p>
+<ol class="not-apple">
+<li>將 CelestiaResources 重新命名為 Override。</li>
+<li>執行 Celestia，選擇檔案 -&gt; 開啟自訂資料夾。</li>
+<li>檔案管理程式會開啟，將 Override 目錄複製進去。</li>
+<li>關閉 Celestia 並重新執行。</li>
+</ol>
+<p class="not-apple">若設定檔和資料檔案設定正確，Celestia 應該會載入你的檔案。</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

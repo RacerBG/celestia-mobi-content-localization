@@ -1,0 +1,50 @@
+<p>Celestia는 모든 플랫폼에서 애드온을 지원합니다.</p>
+<p>인터넷의 여러 곳에서 애드온을 찾을 수 있습니다.</p>
+<p><strong>추천</strong> <a
+href="/resources/categories">celestia.mobi의 애드온</a></p>
+<p><a href="https://celestiaproject.space/forum/viewforum.php?f=23">Celestia 포럼의 애드온 배포 게시판</a></p>
+<p><a href="https://discord.com/invite/WEWDcJh">Celestia Discord 서버</a></p>
+<p><a href="https://www.celestiamotherlode.net">The Celestia Motherlode</a></p>
+<h3 id="install-celestia">Celestia 설치하기</h3>
+<p>최신 Celestia는 <a
+href="/">여기</a>에서 받을 수 있습니다.</p>
+<p>celestia.mobi에 있는 애드온이고 사용하는 Celestia 버전이 직접 열기를 지원한다면 웹페이지에서 'Celestia에서 열기'를 누르세요.</p>
+<p>애드온을 직접 다운로드하거나 사용하는 버전이 직접 열기를 지원하지 않는다면 계속 읽어 주세요.</p>
+<h3 id="use-the-default-add-on-folder-recommended-">기본 애드온 폴더 사용하기(권장)</h3>
+<p>Celestia는 지정된 폴더에서 애드온과 추가 스크립트를 읽습니다. 다음 플랫폼에서는 CelestiaResources 폴더 안에 애드온용 extras와 추가 스크립트용 scripts 폴더가 있습니다.</p>
+<h4 id="ios">iOS/iPadOS</h4>
+<p>폴더는 앱의 공유 폴더에 있습니다. 다음과 같이 내용을 확인할 수 있습니다.</p>
+<ol>
+<li>Celestia를 한 번 이상 실행하세요.</li>
+<li>파일 앱을 여세요.</li>
+<li>둘러보기 탭으로 이동하세요.</li>
+<li>목록에서 '나의 iPhone' 또는 '나의 iPad'를 누르세요.</li>
+<li>Celestia를 찾아 여세요.</li>
+</ol>
+<p>그 안에 CelestiaResources 폴더가 있어야 합니다.</p>
+<h4 id="android" class="not-apple">Android</h4>
+<p class="not-apple">폴더는 앱의 외부 경로 Android/data/space.celestia.mobilecelestia/files/CelestiaResources에 있습니다.</p>
+<p class="not-apple">Android 11 이상에서는 이 폴더가 보이지 않을 수 있습니다. 이 경우 Android/media/space.celestia.mobilecelestia 아래에 CelestiaResources/extras와 CelestiaResources/scripts를 직접 만들 수 있습니다.</p>
+<p class="not-apple">설정 -&gt; 데이터 위치에서 애드온 설치 위치를 변경할 수 있습니다.</p>
+<h4 id="mac-catalyst-">Mac(Catalyst)</h4>
+<p>폴더는 /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.MobileCelestia/Data/Documents/CelestiaResources에 있습니다.</p>
+<p>YOUR USER NAME HERE를 실제 사용자 이름으로 바꾸세요. 앱 안에서 <i>도구</i>, <i>애드온 폴더 열기</i>를 선택해 열 수도 있습니다.</p>
+<h4 id="mac-legacy-">Mac(기존 버전)</h4>
+<p>폴더는 /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.Celestia/Data/Documents/CelestiaResources에 있습니다.</p>
+<p>YOUR USER NAME HERE를 실제 사용자 이름으로 바꾸세요.</p>
+<h4 id="windows-uwp-" class="not-apple">Windows(Microsoft Store)</h4>
+<ol class="not-apple">
+<li>Celestia를 실행하세요.</li>
+<li>파일 -&gt; 사용자 지정 폴더 열기</li>
+</ol>
+<p class="not-apple">CelestiaResources 폴더가 그 안에 있어야 합니다. 경로는 C:\Users\YOUR USER NAME HERE\AppData\Local\Packages\40507LinfengLi.Celestia_r7f2qt5a05s84\LocalState\CelestiaResources와 비슷합니다. YOUR USER NAME HERE를 실제 사용자 이름으로 바꾸세요. 앱 안의 <i>도구</i>, <i>애드온 폴더 열기</i>에서도 열 수 있습니다.</p>
+<h4 id="windows-legacy-" class="not-apple">Windows(기존 버전)</h4>
+<p class="not-apple">Celestia 설치 폴더에 extras와 scripts 폴더가 있습니다. 기본 설치 위치는 C:\Program Files (x86)\Celestia 또는 C:\Program Files\Celestia입니다.</p>
+<h3 id="supply-a-directory-for-data-to-read">데이터를 읽을 폴더 지정하기</h3>
+<p>전체 사용자 지정 방법은 <a
+href="celguide://guide?guide=CA57806B-690B-CE4C-2173-B0B6079544FF">데이터 폴더 변경하기</a>를 참고하세요.</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

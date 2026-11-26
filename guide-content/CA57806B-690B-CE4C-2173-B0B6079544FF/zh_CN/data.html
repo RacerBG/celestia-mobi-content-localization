@@ -1,0 +1,49 @@
+<p>Celestia 支持完整的数据自定义。你可以更改读取数据的目录。</p>
+<p>所有平台都需要先下载对应 Celestia 版本的数据目录副本。</p>
+<ol>
+<li>在<a href="https://github.com/celestiamobile/Celestia/releases">这里</a>下载与你的应用版本对应的原始数据目录。</li>
+<li>修改目录内容和 celestia.cfg 文件。</li>
+</ol>
+<p>然后……</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>将目录复制到设备上的 Android/data/space.celestia.mobilecelestia/files 或 Android/media/space.celestia.mobilecelestia 下。如有需要，请重命名，避免与默认的 CelestiaResources 目录重名。</li>
+<li>运行 Celestia，打开设置 -&gt; 数据位置。</li>
+<li>选择数据目录（CelestiaResources）和配置文件（celestia.cfg）的位置。</li>
+<li>关闭 Celestia 并重新运行。</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS（Catalyst）</h3>
+<ol>
+<li>将目录复制到设备上的任意位置。</li>
+<li>运行 Celestia，打开设置 -&gt; 数据位置。</li>
+<li>选择数据目录（CelestiaResources）和配置文件（celestia.cfg）的位置。</li>
+<li>关闭 Celestia 并重新运行。</li>
+</ol>
+<h3 id="macos-legacy-">macOS（旧版）</h3>
+<ol>
+<li>将目录复制到设备上的任意位置。</li>
+<li>运行 Celestia，在菜单栏中选择 Celestia -&gt; 更改配置文件。</li>
+<li>选择数据目录（CelestiaResources）和配置文件（celestia.cfg）的位置。</li>
+<li>点击“确认并重新启动”。请注意，需要自行重新运行应用。</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows（Microsoft Store）</h3>
+<p class="not-apple">如果使用 2.1.18.0 或更高版本，请按以下步骤操作：</p>
+<ol class="not-apple">
+<li>将目录复制到设备上的任意位置。</li>
+<li>运行 Celestia，打开文件 -&gt; 设置 -&gt; 数据位置。</li>
+<li>选择数据目录（CelestiaResources）和配置文件（celestia.cfg）的位置。</li>
+<li>关闭 Celestia 并重新运行。</li>
+</ol>
+<p class="not-apple">对于更早版本：</p>
+<ol class="not-apple">
+<li>将 CelestiaResources 重命名为 Override。</li>
+<li>运行 Celestia，选择文件 -&gt; 打开自定义文件夹。</li>
+<li>文件管理器会打开，将 Override 目录复制进去。</li>
+<li>关闭 Celestia 并重新运行。</li>
+</ol>
+<p class="not-apple">如果配置和数据文件设置正确，Celestia 应该会加载你的文件。</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

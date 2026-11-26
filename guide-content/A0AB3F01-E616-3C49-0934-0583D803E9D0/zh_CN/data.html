@@ -1,0 +1,18 @@
+<p>celestia.mobi 的应用与桌面版 Celestia 一样，支持脚本和 URL。</p>
+<h3 id="scripts">脚本</h3>
+<p>移动版的收藏 → 脚本和桌面版的文件 → 脚本会列出内置脚本与公共文件夹中的脚本，包括从 celestia.mobi 下载的脚本插件。也可以手动添加脚本。有关如何放入公共文件夹，请参考<a
+href="celguide://guide?guide=D1A96BFA-00BB-0089-F361-10DD886C8A4F">使用插件和脚本</a>。</p>
+<p>Celestia 也可以直接打开脚本。在文件管理器中找到 .cel 或 .celx 文件，并选择用 Celestia 打开。</p>
+<h3 id="urls">URL</h3>
+<h4>cel:// URL（书签）</h4>
+<p>cel:// URL（书签）保存 Celestia 的状态，方便日后返回。内置书签管理器位于桌面版的书签菜单和移动版的收藏中。也可以在浏览器地址栏输入 cel:// URL，系统会提示用 Celestia 打开。</p>
+<h4>celaddon:// 和 celguide:// URL</h4>
+<p>celaddon:// 和 celguide:// 是 celestia.mobi 应用用于打开插件或文章的 URL 协议。插件通常使用 celaddon://item?item=ADDON_ID，文章使用 celguide://guide?guide=ARTICLE_ID。</p>
+<h4>celestia:// URL</h4>
+<p>celestia:// 是 celestia.mobi 应用用于执行各种任务的新 URL 协议。</p>
+<p class="secondary-text-box">celestia://addon/ADDON_ID</p>
+<p>打开指定 ADDON_ID 的插件。</p>
+<p class="secondary-text-box">celestia://article/ARTICLE_ID</p>
+<p>打开指定 ARTICLE_ID 的文章。</p>
+<p class="secondary-text-box">celestia://object/OBJECT_PATH?action=ACTION</p>
+<p>ACTION 是可选参数。省略时，URL 会打开 OBJECT_PATH 指定天体的信息页面。ACTION 可取 select、go、center、follow、chase、track、syncOrbit、lock 和 land。</p>

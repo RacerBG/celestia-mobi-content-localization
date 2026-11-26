@@ -1,0 +1,35 @@
+
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0"><table class="mobile-only">
+    <style>.tutorial-icon { width:32px;height:32px } .theme-dark .tutorial-icon { filter:invert(1) }</style>
+    <tr>
+        <td><img class="tutorial-icon" src="{0}"></td>
+        <td>Toca el botón de modo de la barra lateral para alternar entre el modo de objeto y el de cámara.</td>
+    </tr>
+    <tr>
+        <td rowspan="2"><img class="tutorial-icon" src="{1}"></td>
+        <td>En el modo de objeto, arrastra para girar alrededor del objeto.</td>
+    </tr>
+    <tr>
+        <td>Separa o junta dos dedos para acercarte o alejarte del objeto.</td>
+    </tr>
+    <tr>
+        <td rowspan="2"><img class="tutorial-icon" src="{2}"></td>
+        <td>En el modo de cámara, arrastra para mover el campo de visión.</td>
+    </tr>
+    <tr>
+        <td>Separa o junta dos dedos para ampliar o reducir el campo de visión.</td>
+    </tr>
+    <script>
+        const iconElements = document.getElementsByClassName('tutorial-icon');
+        for (let i = 0; i < iconElements.length; i++) {
+            iconElements[i].src = iconElements[i].src.replace('$%7Bf%7D', 'icon.svg');
+        }
+    </script>
+</table></div></figure>
+<p></p>
+<style>.tutorial-button { width:100%;text-align:center; } .catalyst .mobile-only { display:none } .uwp .mobile-only { display:none } .xbox .mobile-only { display:none }</style>
+<script>function runDemoScript() { Celestia.sendMessage("runDemo", JSON.stringify({}), 4);}</script>
+<p><button onclick="runDemoScript()" class="button-filled tutorial-button">Ejecutar demostración</button></p>
+<p><button onclick="location.href='celguide://guide?guide=BE1B5023-46B6-1F10-F15F-3B3F02F30300'" class="button-filled tutorial-button">Referencia de controles de entrada</button></p>
+<p><button onclick="location.href='celguide://guide?guide=D1A96BFA-00BB-0089-F361-10DD886C8A4F'" class="button-filled tutorial-button">Usar complementos y scripts</button></p>
+<p><button onclick="location.href='celguide://guide?guide=A0AB3F01-E616-3C49-0934-0583D803E9D0'" class="button-filled tutorial-button">Scripts y URL</button></p>

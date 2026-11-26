@@ -1,0 +1,29 @@
+// English: Create, test, and share your own Celestia add-on
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "建立、測試並分享自己的 Celestia 附加元件";
+
+// English: Choose how you move relative to objects
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "選擇相對於天體的移動方式";
+
+// English: Connect a gamepad and customize its controls
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "連接遊戲控制器並自訂操作";
+
+// English: Lua-based scripting API reference for Celestia
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "以 Lua 為基礎的 Celestia 指令碼 API 參考";
+
+// English: Set the date to the mission's active period
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "將日期設為任務的活動期間";
+
+// English: Run scripts, save bookmarks, and open Celestia links
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "執行指令碼、儲存書籤並開啟 Celestia 連結";
+
+// English: Touch, mouse, keyboard, gamepad, and joystick
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "觸控、滑鼠、鍵盤、遊戲控制器與搖桿";
+
+// English: Use your own Celestia data and configuration files
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "使用自己的 Celestia 資料與設定檔";
+
+// English: Install add-ons and scripts on your device
+"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "在裝置上安裝附加元件與指令碼";
+
+// English: Write CEL and CELX scripts to run in Celestia
+"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "編寫可在 Celestia 中執行的 CEL 和 CELX 指令碼";

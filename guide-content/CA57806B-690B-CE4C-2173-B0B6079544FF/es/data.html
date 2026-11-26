@@ -1,0 +1,49 @@
+<p>Celestia admite una personalización completa. Puedes sustituir el directorio del que lee los datos.</p>
+<p>En todas las plataformas, primero debes descargar una copia del directorio de datos de la versión correspondiente de Celestia.</p>
+<ol>
+<li>Descarga <a href="https://github.com/celestiamobile/Celestia/releases">aquí</a> el directorio de datos original de tu versión de la aplicación.</li>
+<li>Modifica el directorio y el archivo celestia.cfg.</li>
+</ol>
+<p>Después…</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>Copia el directorio al dispositivo dentro de Android/data/space.celestia.mobilecelestia/files o Android/media/space.celestia.mobilecelestia. Cámbiale el nombre si es necesario para evitar conflictos con el directorio predeterminado CelestiaResources.</li>
+<li>Ejecuta Celestia y abre Ajustes -&gt; Ubicación de datos.</li>
+<li>Selecciona la ubicación del directorio de datos (CelestiaResources) y del archivo de configuración (celestia.cfg).</li>
+<li>Cierra Celestia y vuelve a ejecutarlo.</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS (Catalyst)</h3>
+<ol>
+<li>Copia el directorio a cualquier ubicación del dispositivo.</li>
+<li>Ejecuta Celestia y abre Ajustes -&gt; Ubicación de datos.</li>
+<li>Selecciona la ubicación del directorio de datos (CelestiaResources) y del archivo de configuración (celestia.cfg).</li>
+<li>Cierra Celestia y vuelve a ejecutarlo.</li>
+</ol>
+<h3 id="macos-legacy-">macOS (versión clásica)</h3>
+<ol>
+<li>Copia el directorio a cualquier ubicación del dispositivo.</li>
+<li>Ejecuta Celestia y abre en la barra de menús Celestia -&gt; Cambiar archivo de configuración.</li>
+<li>Selecciona la ubicación del directorio de datos (CelestiaResources) y del archivo de configuración (celestia.cfg).</li>
+<li>Pulsa «Confirmar y reiniciar». Ten en cuenta que debes reiniciar la aplicación por tu cuenta.</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows (Microsoft Store)</h3>
+<p class="not-apple">Si utilizas la versión 2.1.18.0 o posterior, sigue estos pasos:</p>
+<ol class="not-apple">
+<li>Copia el directorio a cualquier ubicación del dispositivo.</li>
+<li>Ejecuta Celestia y abre Archivo -&gt; Ajustes -&gt; Ubicación de datos.</li>
+<li>Selecciona la ubicación del directorio de datos (CelestiaResources) y del archivo de configuración (celestia.cfg).</li>
+<li>Cierra Celestia y vuelve a ejecutarlo.</li>
+</ol>
+<p class="not-apple">Para versiones anteriores:</p>
+<ol class="not-apple">
+<li>Cambia el nombre de CelestiaResources a Override.</li>
+<li>Ejecuta Celestia y selecciona Archivo -&gt; Abrir carpeta personalizada.</li>
+<li>Se abrirá el explorador de archivos. Copia allí el directorio Override.</li>
+<li>Cierra Celestia y vuelve a ejecutarlo.</li>
+</ol>
+<p class="not-apple">Si los archivos de configuración y datos están correctamente preparados, Celestia debería cargar tus archivos.</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

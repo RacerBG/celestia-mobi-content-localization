@@ -8,7 +8,7 @@
 //"0F87A858-9D09-DB9A-65A9-1A9D9D738916" = "Newest Add-ons of the Week";
 
 // English: Script Editor
-//"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "Script Editor";
+"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "指令碼編輯器";
 
 // English: Downloads
 //"113C3057-6A98-B4BC-A794-DA8F3AA2F793" = "Downloads";
@@ -116,19 +116,19 @@
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "Asteroid Found Before Impact";
 
 // English: View Missing Spacecraft
-//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "View Missing Spacecraft";
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "查看未顯示的太空載具";
 
 // English: CELX Scripting Documentation
-//"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "CELX Scripting Documentation";
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "CELX 指令碼文件";
 
 // English: Flight Mode
-//"7013117F-362E-7138-59BB-B9ED52ADECF1" = "Flight Mode";
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "飛行模式";
 
 // English: Newest Add-ons of the Month
 //"716CB087-887B-ECFD-30DA-C1EDDAA3FF9E" = "Newest Add-ons of the Month";
 
 // English: Game Controller
-//"72B827A7-7164-6A3E-2557-4C164E14E95C" = "Game Controller";
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "遊戲控制器";
 
 // English: Newest Add-ons of the Month
 //"7622F06B-4A57-0924-C6B1-A16B05631D15" = "Newest Add-ons of the Month";
@@ -155,7 +155,7 @@
 //"89552EE4-AC68-DCAB-90B2-7D1FFB1133A4" = "Celestia 1.5.5";
 
 // English: Make an Add-on
-//"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "Make an Add-on";
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "製作附加元件";
 
 // English: Sagittarius A* Revealed
 //"92DB1F10-899E-E5E4-D997-19EA8018AA8F" = "Sagittarius A* Revealed";
@@ -173,7 +173,7 @@
 //"9FC52362-A105-403D-9DDC-EC99C4C0B129" = "Celestia on Apple Vision Pro";
 
 // English: Scripts and URLs
-//"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "Scripts and URLs";
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "指令碼與 URL";
 
 // English: Newest Add-ons of the Week
 //"A2D50375-A087-68EE-DFF3-9A22FB470507" = "Newest Add-ons of the Week";
@@ -193,14 +193,14 @@
 // English: Cassini Mission
 //"B9E7043E-8297-C307-3D20-A339992FC582" = "Cassini Mission";
 
-// English: Controls Reference
-//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Controls Reference";
+// English: Input Controls Reference
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "輸入操作參考";
 
 // English: Ed Stone Retires
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Ed Stone Retires";
 
 // English: Custom Data Directory
-//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Custom Data Directory";
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "自訂資料目錄";
 
 // English: Artemis II Crew Revealed
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "Artemis II Crew Revealed";
@@ -218,7 +218,7 @@
 //"D05707AB-99FE-4693-A623-0DE1CA68DE85" = "Rubin's First-Light Images";
 
 // English: Use Add-ons and Scripts
-//"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "Use Add-ons and Scripts";
+"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "使用附加元件與指令碼";
 
 // English: Webb's First Images
 //"D631521A-E9AA-1E31-4101-8F6E10C239BB" = "Webb's First Images";

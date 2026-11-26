@@ -1,0 +1,711 @@
+<h3 id="touch">タッチ操作</h3>
+<p>モバイル版 Celestia はタッチ操作に対応しています。サイドバーで 2 つのモードを切り替えられます。</p>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="モード"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>カメラモード</td>
+<td>ドラッグしてカメラの向きを変える</td>
+</tr>
+<tr>
+<td></td>
+<td>ピンチ操作で視野角（FOV）を変える</td>
+</tr>
+<tr>
+<td>天体モード</td>
+<td>ドラッグして選択した天体の周りを回る</td>
+</tr>
+<tr>
+<td></td>
+<td>ピンチ操作で選択対象までの距離を調整する</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h3 id="mouse">マウス</h3>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>左ボタンでドラッグ</td>
+<td>カメラの向きを変える</td>
+</tr>
+<tr>
+<td>右ボタンでドラッグ</td>
+<td>選択した天体の周りを回る [Shift+矢印キー]</td>
+</tr>
+<tr>
+<td>左右両ボタンで左／右にドラッグ</td>
+<td>視点を左／右にロールする [左／右矢印]</td>
+</tr>
+<tr>
+<td>左右両ボタンで上／下にドラッグ</td>
+<td>選択対象までの距離を調整する [Home/End]</td>
+</tr>
+<tr>
+<td>ホイール</td>
+<td>選択対象までの距離を調整する [Home/End]</td>
+</tr>
+<tr>
+<td>Ctrl+左ボタンで上／下にドラッグ</td>
+<td>選択対象までの距離を調整する [Home/End]</td>
+</tr>
+<tr>
+<td>Shift+左ボタンでドラッグ</td>
+<td>視野角（FOV）を変える [. / ,]</td>
+</tr>
+<tr>
+<td>中央ボタン</td>
+<td>視野角を 45 度と直前の設定の間で切り替える</td>
+</tr>
+<tr>
+<td>左クリック（天体上）</td>
+<td>天体を選択する [Enter キー — 天体名で指定]</td>
+</tr>
+<tr>
+<td>左クリック（天体のない場所）</td>
+<td>選択を解除する</td>
+</tr>
+<tr>
+<td>左ダブルクリック（天体上）</td>
+<td>天体を選択して中央に表示する</td>
+</tr>
+<tr>
+<td>右クリック</td>
+<td>コンテキストメニューを開く</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h3 id="keyboard">キーボード</h3>
+<h4 id="navigation">ナビゲーション</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 - 9</td>
+<td>最も近い恒星の惑星を選択する</td>
+</tr>
+<tr>
+<td>0（ゼロ）</td>
+<td>現在の惑星または星系の中心星を選択する</td>
+</tr>
+<tr>
+<td>H</td>
+<td>太陽（ホーム星系）を選択する</td>
+</tr>
+<tr>
+<td>C</td>
+<td>選択した天体を中央に表示する</td>
+</tr>
+<tr>
+<td>G</td>
+<td>選択した天体に移動する</td>
+</tr>
+<tr>
+<td>F</td>
+<td>選択した天体についていく</td>
+</tr>
+<tr>
+<td>T</td>
+<td>選択した天体を視野に捉え続ける</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>選択した天体の自転に同期した速度で周回する</td>
+</tr>
+<tr>
+<td>:</td>
+<td>選択した天体に参照系を固定する</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>選択した天体を追いかける</td>
+</tr>
+<tr>
+<td>Shift+C</td>
+<td>中央表示／周回 — 参照天体の位置を変えずに選択した天体を中央に表示する</td>
+</tr>
+<tr>
+<td>Ctrl+G</td>
+<td>選択した天体の表面に移動する</td>
+</tr>
+<tr>
+<td>Ctrl+F</td>
+<td>高度・方位角モードを切り替える</td>
+</tr>
+<tr>
+<td>Home</td>
+<td>天体に近づく</td>
+</tr>
+<tr>
+<td>End</td>
+<td>天体から遠ざかる</td>
+</tr>
+<tr>
+<td>*</td>
+<td>後ろを見る</td>
+</tr>
+<tr>
+<td>Backspace</td>
+<td>現在の天体の親天体を選択するか、選択を解除する</td>
+</tr>
+<tr>
+<td>Esc</td>
+<td>移動またはスクリプトを中止する</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="time-control">時間の操作</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spacebar</td>
+<td>時間の進行とスクリプトを一時停止／再開する</td>
+</tr>
+<tr>
+<td>J</td>
+<td>時間の逆行／順行を切り替える</td>
+</tr>
+<tr>
+<td>\</td>
+<td>時間の速度を順行 1 倍（通常）に設定し、加速／減速の倍率を解除する</td>
+</tr>
+<tr>
+<td>L</td>
+<td>時間の速度を 10 倍速くする</td>
+</tr>
+<tr>
+<td>K</td>
+<td>時間の速度を 10 倍遅くする</td>
+</tr>
+<tr>
+<td>Shift+L</td>
+<td>時間の速度を 2 倍速くする</td>
+</tr>
+<tr>
+<td>Shift+K</td>
+<td>時間の速度を 2 倍遅くする</td>
+</tr>
+<tr>
+<td>!</td>
+<td>現在のシステム日時に設定する</td>
+</tr>
+<tr>
+<td>?</td>
+<td>観測者と選択した天体の間の光の到達時間を表示する</td>
+</tr>
+<tr>
+<td>-（ハイフン）</td>
+<td>現在のシミュレーション時刻から光の到達時間を差し引く</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="labels-on-off-toggles-">ラベル（表示／非表示の切り替え）</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E</td>
+<td>銀河</td>
+</tr>
+<tr>
+<td>Shift+E</td>
+<td>球状星団</td>
+</tr>
+<tr>
+<td>B</td>
+<td>恒星</td>
+</tr>
+<tr>
+<td>P</td>
+<td>惑星</td>
+</tr>
+<tr>
+<td>Shift+P</td>
+<td>準惑星</td>
+</tr>
+<tr>
+<td>M</td>
+<td>衛星</td>
+</tr>
+<tr>
+<td>Shift+M</td>
+<td>小衛星</td>
+</tr>
+<tr>
+<td>W</td>
+<td>小惑星</td>
+</tr>
+<tr>
+<td>Shift+W</td>
+<td>彗星</td>
+</tr>
+<tr>
+<td>N</td>
+<td>宇宙機</td>
+</tr>
+<tr>
+<td>=</td>
+<td>星座</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>場所</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="render-display-on-off-toggles-">描画／表示（オン／オフの切り替え）</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U</td>
+<td>銀河</td>
+</tr>
+<tr>
+<td>Shift+U</td>
+<td>球状星団</td>
+</tr>
+<tr>
+<td>^</td>
+<td>星雲</td>
+</tr>
+<tr>
+<td>Ctrl+A</td>
+<td>大気</td>
+</tr>
+<tr>
+<td>I</td>
+<td>雲</td>
+</tr>
+<tr>
+<td>Ctrl+L</td>
+<td>夜側のマップ</td>
+</tr>
+<tr>
+<td>Ctrl+T</td>
+<td>彗星の尾</td>
+</tr>
+<tr>
+<td>Ctrl+E</td>
+<td>食の影</td>
+</tr>
+<tr>
+<td>Ctrl+B</td>
+<td>星座の境界</td>
+</tr>
+<tr>
+<td>/</td>
+<td>星座線</td>
+</tr>
+<tr>
+<td>;</td>
+<td>地球基準の赤道座標球</td>
+</tr>
+<tr>
+<td>Ctrl+K</td>
+<td>マーカー（天体上に配置）</td>
+</tr>
+<tr>
+<td>O</td>
+<td>軌道（選択したすべての軌道の表示を切り替える）</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="render-options">描画オプション</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{</td>
+<td>環境光を弱くする</td>
+</tr>
+<tr>
+<td>}</td>
+<td>環境光を強くする</td>
+</tr>
+<tr>
+<td>(</td>
+<td>銀河の光の増幅率を下げる</td>
+</tr>
+<tr>
+<td>)</td>
+<td>銀河の光の増幅率を上げる</td>
+</tr>
+<tr>
+<td>[</td>
+<td>限界等級を下げる：AutoMag オフ時は限界等級を下げる（恒星が減る）。AutoMag オン時は視野角 45 度での限界等級を下げる</td>
+</tr>
+<tr>
+<td>]</td>
+<td>等級を上げる：AutoMag オフ時は限界等級を上げる（恒星が増える）。AutoMag オン時は視野角 45 度での限界等級を上げる</td>
+</tr>
+<tr>
+<td>Ctrl+Y</td>
+<td>自動等級を切り替える（視野角に合わせて恒星の見え方を自動調整する</td>
+</tr>
+<tr>
+<td>,</td>
+<td>視野角を狭める [Shift+左ボタンでドラッグ]</td>
+</tr>
+<tr>
+<td>.</td>
+<td>視野角を広げる [Shift+左ボタンでドラッグ]</td>
+</tr>
+<tr>
+<td>Ctrl+X</td>
+<td>線のアンチエイリアスを切り替える</td>
+</tr>
+<tr>
+<td>Alt+Enter</td>
+<td>表示モードを切り替える（全画面／ウインドウ）</td>
+</tr>
+<tr>
+<td>Ctrl+P</td>
+<td>選択した天体にマーカーを付ける</td>
+</tr>
+<tr>
+<td>Ctrl+V</td>
+<td>対応している OpenGL 描画方式を順に切り替える</td>
+</tr>
+<tr>
+<td>+</td>
+<td>惑星のテクスチャの種類を切り替える（想像図／既知の範囲）</td>
+</tr>
+<tr>
+<td>%</td>
+<td>恒星の色テーブルを切り替える</td>
+</tr>
+<tr>
+<td>Ctrl+S</td>
+<td>恒星の表示形式を順に切り替える（点／ぼかした円盤／拡大縮小する円盤）</td>
+</tr>
+<tr>
+<td>V</td>
+<td>情報テキストの詳しさを順に切り替える（なし／簡潔／詳細）</td>
+</tr>
+<tr>
+<td>Ctrl+W</td>
+<td>ワイヤーフレームモードを切り替える</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="multiview-options">複数ビューのオプション</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+R</td>
+<td>ビューを横方向に分割し、上部と下部に分ける</td>
+</tr>
+<tr>
+<td>Ctrl+U</td>
+<td>ビューを縦方向に分割し、左部と右部に分ける</td>
+</tr>
+<tr>
+<td>Tab</td>
+<td>すべてのアクティブなビューを順に切り替える</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>アクティブなビューを削除する</td>
+</tr>
+<tr>
+<td>Ctrl+D</td>
+<td>アクティブなビュー以外をすべて削除する（単一ビューに戻す）</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="navigation-via-arrow-keys">矢印キーによるナビゲーション</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上／下矢印</td>
+<td>下／上にピッチする</td>
+</tr>
+<tr>
+<td>左／右矢印</td>
+<td>左／右にロールする</td>
+</tr>
+<tr>
+<td>Shift+左／右矢印</td>
+<td>天体の周りを回る：右／左</td>
+</tr>
+<tr>
+<td>Shift+上／下矢印</td>
+<td>天体の周りを回る：下／上</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="navigation-via-number-pad-keys-with-numlock-active-">テンキーによるナビゲーション（NumLock が有効な場合）</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>下にピッチする [下矢印]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>上にピッチする [上矢印]</td>
+</tr>
+<tr>
+<td>7</td>
+<td>左にロールする [左矢印]</td>
+</tr>
+<tr>
+<td>9</td>
+<td>右にロールする [右矢印]</td>
+</tr>
+<tr>
+<td>5</td>
+<td>回転を停止する</td>
+</tr>
+<tr>
+<td>4</td>
+<td>左にヨーする</td>
+</tr>
+<tr>
+<td>6</td>
+<td>右にヨーする</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="motion-spaceflight-">移動（宇宙飛行）</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Z</td>
+<td>速度を下げる</td>
+</tr>
+<tr>
+<td>A</td>
+<td>速度を上げる</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>進行方向を逆にする</td>
+</tr>
+<tr>
+<td>X</td>
+<td>移動方向を画面の中央に向ける</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>速度を毎秒 1 km に設定する</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>速度を毎秒 1,000 km に設定する</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>速度を光速（1 c）に設定する</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>速度を光速の 10 倍（10 c）に設定する</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>速度を毎秒 1 天文単位に設定する</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>速度を毎秒 1 光年に設定する</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>移動を停止する</td>
+</tr>
+<tr>
+<td>S</td>
+<td>移動を停止する</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h4 id="other-functions">その他の機能</h4>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl+C</td>
+<td>位置の URL をクリップボードにコピーする（Cel:// URL）</td>
+</tr>
+<tr>
+<td>Ctrl+Insert</td>
+<td>位置の URL をクリップボードにコピーする（Cel:// URL）</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>画像をファイルに保存する（スクリーンショット）</td>
+</tr>
+<tr>
+<td>Shift+F10</td>
+<td>動画をファイルに保存する（ビデオ）</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>動画の録画中：録画を開始／一時停止する</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>動画の録画中：録画を停止する</td>
+</tr>
+<tr>
+<td>~</td>
+<td>デバッグコンソールを切り替える（上／下矢印キーで一覧をスクロール）</td>
+</tr>
+<tr>
+<td>`</td>
+<td>描画の &quot;毎秒フレーム数&quot;（FPS）の表示を切り替える</td>
+</tr>
+<tr>
+<td>Ctrl+O</td>
+<td>&quot;天体を選択&quot; ダイアログを表示する</td>
+</tr>
+<tr>
+<td>@</td>
+<td>編集モードを切り替える（天体の配置を補助する）</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>名前入力モードを切り替える（Tab / Shift+Tab で項目を選び、Esc で終了）</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h3 id="gamepad-joystick">ゲームパッド／ジョイスティック</h3>
+<p>動作のカスタマイズについては、 <a href="/help/game-controller">こちらのガイドをご覧ください</a>.</p>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="操作"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F8（Win32 のみ）</td>
+<td>ジョイスティック操作を切り替える</td>
+</tr>
+<tr>
+<td>X 軸</td>
+<td>左／右にヨーする</td>
+</tr>
+<tr>
+<td>Y 軸</td>
+<td>上／下にピッチする</td>
+</tr>
+<tr>
+<td>L トリガー</td>
+<td>左にロールする</td>
+</tr>
+<tr>
+<td>R トリガー</td>
+<td>右にロールする</td>
+</tr>
+<tr>
+<td>ボタン 1（Xbox の A、PS4 の X）</td>
+<td>移動を遅くする</td>
+</tr>
+<tr>
+<td>ボタン 2（Xbox の X、PS4 の四角）</td>
+<td>移動を速くする</td>
+</tr>
+</tbody>
+</table></div></figure>
+<h3 id="compatibility">互換性</h3>
+<p>モバイル版 Celestia は、マウスやキーボードが端末に接続されている場合、それらの操作にも対応しています。 <code>カメラモード</code>に切り替えると、マウスとキーボードの動作はデスクトップ版とほぼ同じになります。</p>
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0" role="region" aria-label="プラットフォーム"><table>
+<thead>
+<tr>
+<th>プラットフォーム</th>
+<th>問題</th>
+<th>対処方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Android</td>
+<td>マウスの右ボタン操作（クリック／ドラッグ）が使えない</td>
+<td>ALT キーを押しながらマウスの左ボタンを使う</td>
+</tr>
+<tr>
+<td>Chrome OS</td>
+<td>CTRL + ドラッグが機能しない</td>
+<td>CTRL + ドラッグでは ALT キーも押す</td>
+</tr>
+<tr>
+<td>Android/Chrome OS</td>
+<td>キーボードが機能しないことがある</td>
+<td>発生したときに Enter キーを数回押してみる</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td>キーボードが機能しないことがある</td>
+<td>1.5.18 から 1.5.23 ではメニューをクリックする。上／下矢印キーを押してフォーカスリングを表示し、メニューを閉じる</td>
+</tr>
+</tbody>
+</table></div></figure>

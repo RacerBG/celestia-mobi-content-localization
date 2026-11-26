@@ -1,0 +1,29 @@
+// English: Create, test, and share your own Celestia add-on
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "나만의 Celestia 애드온을 만들고 테스트하고 공유하세요";
+
+// English: Choose how you move relative to objects
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "천체를 기준으로 이동하는 방식을 선택하세요";
+
+// English: Connect a gamepad and customize its controls
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "게임패드를 연결하고 조작 방식을 사용자 지정하세요";
+
+// English: Lua-based scripting API reference for Celestia
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "Lua 기반 Celestia 스크립트 API 참고 문서";
+
+// English: Set the date to the mission's active period
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "날짜를 임무의 활동 기간으로 설정하세요";
+
+// English: Run scripts, save bookmarks, and open Celestia links
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "스크립트 실행, 북마크 저장, Celestia 링크 열기";
+
+// English: Touch, mouse, keyboard, gamepad, and joystick
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "터치, 마우스, 키보드, 게임패드 및 조이스틱";
+
+// English: Use your own Celestia data and configuration files
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "나만의 Celestia 데이터와 설정 파일을 사용하세요";
+
+// English: Install add-ons and scripts on your device
+"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "기기에 애드온과 스크립트를 설치하세요";
+
+// English: Write CEL and CELX scripts to run in Celestia
+"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "Celestia에서 실행할 CEL 및 CELX 스크립트를 작성하세요";

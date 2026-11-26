@@ -1,0 +1,49 @@
+<p>Celestia позволяет полностью настроить данные. Можно изменить папку, из которой они загружаются.</p>
+<p>На всех платформах сначала загрузите копию папки данных соответствующего выпуска Celestia.</p>
+<ol>
+<li>Загрузите исходную папку данных для вашей версии приложения <a href="https://github.com/celestiamobile/Celestia/releases">здесь</a>.</li>
+<li>Измените папку и файл celestia.cfg.</li>
+</ol>
+<p>Затем…</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>Скопируйте папку на устройство в Android/data/space.celestia.mobilecelestia/files или Android/media/space.celestia.mobilecelestia. При необходимости переименуйте её, чтобы избежать совпадения с именем стандартной папки CelestiaResources.</li>
+<li>Запустите Celestia и откройте Настройки -&gt; Расположение данных.</li>
+<li>Выберите расположение папки данных (CelestiaResources) и файла конфигурации (celestia.cfg).</li>
+<li>Закройте Celestia и запустите снова.</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS (Catalyst)</h3>
+<ol>
+<li>Скопируйте папку в любое место на устройстве.</li>
+<li>Запустите Celestia и откройте Настройки -&gt; Расположение данных.</li>
+<li>Выберите расположение папки данных (CelestiaResources) и файла конфигурации (celestia.cfg).</li>
+<li>Закройте Celestia и запустите снова.</li>
+</ol>
+<h3 id="macos-legacy-">macOS (старая версия)</h3>
+<ol>
+<li>Скопируйте папку в любое место на устройстве.</li>
+<li>Запустите Celestia и откройте в строке меню Celestia -&gt; Изменить файл конфигурации.</li>
+<li>Выберите расположение папки данных (CelestiaResources) и файла конфигурации (celestia.cfg).</li>
+<li>Нажмите «Подтвердить и перезапустить». Учтите, что перезапустить приложение нужно самостоятельно.</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows (Microsoft Store)</h3>
+<p class="not-apple">Для версии 2.1.18.0 и новее выполните следующие действия:</p>
+<ol class="not-apple">
+<li>Скопируйте папку в любое место на устройстве.</li>
+<li>Запустите Celestia и откройте Файл -&gt; Настройки -&gt; Расположение данных.</li>
+<li>Выберите расположение папки данных (CelestiaResources) и файла конфигурации (celestia.cfg).</li>
+<li>Закройте Celestia и запустите снова.</li>
+</ol>
+<p class="not-apple">Для более ранних версий:</p>
+<ol class="not-apple">
+<li>Переименуйте CelestiaResources в Override.</li>
+<li>Запустите Celestia и выберите Файл -&gt; Открыть пользовательскую папку.</li>
+<li>Откроется файловый менеджер. Скопируйте в него папку Override.</li>
+<li>Закройте Celestia и запустите снова.</li>
+</ol>
+<p class="not-apple">Если файлы конфигурации и данных подготовлены правильно, Celestia должна загрузить ваши файлы.</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

@@ -1,0 +1,50 @@
+<p>Celestia поддерживает дополнения на всех платформах.</p>
+<p>Дополнения можно найти на различных сайтах в интернете.</p>
+<p><strong>Рекомендуется</strong> <a
+href="/resources/categories">Дополнения на celestia.mobi</a></p>
+<p><a href="https://celestiaproject.space/forum/viewforum.php?f=23">Публикации дополнений на форуме Celestia</a></p>
+<p><a href="https://discord.com/invite/WEWDcJh">Сервер Celestia в Discord</a></p>
+<p><a href="https://www.celestiamotherlode.net">The Celestia Motherlode</a></p>
+<h3 id="install-celestia">Установка Celestia</h3>
+<p>Последнюю версию Celestia можно получить <a
+href="/">здесь</a>.</p>
+<p>Если дополнение размещено на celestia.mobi и ваша версия поддерживает его прямое открытие, нажмите «Открыть в Celestia» на веб-странице.</p>
+<p>Если вы загружаете дополнения вручную или ваша версия не поддерживает прямое открытие, читайте далее.</p>
+<h3 id="use-the-default-add-on-folder-recommended-">Используйте стандартную папку дополнений (рекомендуется)</h3>
+<p>Celestia читает дополнения и дополнительные скрипты из определённых папок. На следующих платформах основная папка называется CelestiaResources и содержит extras для дополнений и scripts для дополнительных скриптов.</p>
+<h4 id="ios">iOS/iPadOS</h4>
+<p>Папка находится в общей папке приложения. Чтобы посмотреть её содержимое:</p>
+<ol>
+<li>Запустите Celestia хотя бы один раз.</li>
+<li>Откройте приложение «Файлы».</li>
+<li>Перейдите на вкладку «Обзор».</li>
+<li>Выберите в списке «На моём iPhone» или «На моём iPad».</li>
+<li>Найдите Celestia и откройте её папку.</li>
+</ol>
+<p>Внутри должна находиться папка CelestiaResources.</p>
+<h4 id="android" class="not-apple">Android</h4>
+<p class="not-apple">Папка находится во внешнем каталоге приложения: Android/data/space.celestia.mobilecelestia/files/CelestiaResources.</p>
+<p class="not-apple">На Android 11 и новее эта папка может быть недоступна. Вместо неё можно открыть Android/media/space.celestia.mobilecelestia и вручную создать CelestiaResources/extras и CelestiaResources/scripts.</p>
+<p class="not-apple">Место установки дополнений можно изменить в Настройки -&gt; Расположение данных.</p>
+<h4 id="mac-catalyst-">Mac (Catalyst)</h4>
+<p>Папка находится в /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.MobileCelestia/Data/Documents/CelestiaResources.</p>
+<p>Замените YOUR USER NAME HERE своим именем пользователя. Папку также можно открыть в приложении через <i>Инструменты</i>, <i>Открыть папку дополнений</i>.</p>
+<h4 id="mac-legacy-">Mac (старая версия)</h4>
+<p>Папка находится в /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.Celestia/Data/Documents/CelestiaResources.</p>
+<p>Замените YOUR USER NAME HERE своим именем пользователя.</p>
+<h4 id="windows-uwp-" class="not-apple">Windows (Microsoft Store)</h4>
+<ol class="not-apple">
+<li>Запустите Celestia.</li>
+<li>Файл -&gt; Открыть пользовательскую папку</li>
+</ol>
+<p class="not-apple">Там должна находиться папка CelestiaResources. Её путь выглядит примерно так: C:\Users\YOUR USER NAME HERE\AppData\Local\Packages\40507LinfengLi.Celestia_r7f2qt5a05s84\LocalState\CelestiaResources. Замените YOUR USER NAME HERE своим именем пользователя. Также её можно открыть в приложении через <i>Инструменты</i>, <i>Открыть папку дополнений</i>.</p>
+<h4 id="windows-legacy-" class="not-apple">Windows (старая версия)</h4>
+<p class="not-apple">В папке установки Celestia находятся extras и scripts. По умолчанию путь установки — C:\Program Files (x86)\Celestia или C:\Program Files\Celestia.</p>
+<h3 id="supply-a-directory-for-data-to-read">Указать папку данных</h3>
+<p>Для полной настройки см. <a
+href="celguide://guide?guide=CA57806B-690B-CE4C-2173-B0B6079544FF">Изменение папки данных</a>.</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

@@ -1,0 +1,49 @@
+<p>Celestia は完全なカスタマイズにも対応しています。データの読み込み元フォルダを変更できます。</p>
+<p>どのプラットフォームでも、まず対応する Celestia リリースのデータフォルダをダウンロードします。</p>
+<ol>
+<li>アプリのバージョンに対応する元のデータフォルダを<a href="https://github.com/celestiamobile/Celestia/releases">こちら</a>からダウンロードします。</li>
+<li>フォルダと celestia.cfg ファイルを編集します。</li>
+</ol>
+<p>続いて…</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>フォルダを端末の Android/data/space.celestia.mobilecelestia/files または Android/media/space.celestia.mobilecelestia 内にコピーします。標準の CelestiaResources と名前が重複しないよう、必要に応じて変更してください。</li>
+<li>Celestia を起動し、設定 -&gt; データの場所を開きます。</li>
+<li>データフォルダ（CelestiaResources）と設定ファイル（celestia.cfg）の場所を選びます。</li>
+<li>Celestia を終了して再起動します。</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS（Catalyst）</h3>
+<ol>
+<li>フォルダを端末内の任意の場所にコピーします。</li>
+<li>Celestia を起動し、設定 -&gt; データの場所を開きます。</li>
+<li>データフォルダ（CelestiaResources）と設定ファイル（celestia.cfg）の場所を選びます。</li>
+<li>Celestia を終了して再起動します。</li>
+</ol>
+<h3 id="macos-legacy-">macOS（従来版）</h3>
+<ol>
+<li>フォルダを端末内の任意の場所にコピーします。</li>
+<li>Celestia を起動し、メニューバーの Celestia -&gt; 設定ファイルを変更を開きます。</li>
+<li>データフォルダ（CelestiaResources）と設定ファイル（celestia.cfg）の場所を選びます。</li>
+<li>「確認して再起動」を押します。ただし、アプリの再起動は手動で行う必要があります。</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows（Microsoft Store）</h3>
+<p class="not-apple">2.1.18.0 以降では、次の手順を行います。</p>
+<ol class="not-apple">
+<li>フォルダを端末内の任意の場所にコピーします。</li>
+<li>Celestia を起動し、ファイル -&gt; 設定 -&gt; データの場所を開きます。</li>
+<li>データフォルダ（CelestiaResources）と設定ファイル（celestia.cfg）の場所を選びます。</li>
+<li>Celestia を終了して再起動します。</li>
+</ol>
+<p class="not-apple">それ以前のバージョンでは：</p>
+<ol class="not-apple">
+<li>CelestiaResources の名前を Override に変更します。</li>
+<li>Celestia を起動し、ファイル -&gt; カスタムフォルダを開くを選びます。</li>
+<li>ファイル管理画面が開くので、Override フォルダをその中にコピーします。</li>
+<li>Celestia を終了して再起動します。</li>
+</ol>
+<p class="not-apple">設定ファイルとデータが正しく配置されていれば、Celestia がそれらを読み込みます。</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

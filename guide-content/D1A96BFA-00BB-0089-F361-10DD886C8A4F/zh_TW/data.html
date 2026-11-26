@@ -1,0 +1,50 @@
+<p>所有平台的 Celestia 均支援附加元件。</p>
+<p>你可以在網路上的許多地方找到附加元件。</p>
+<p><strong>推薦</strong> <a
+href="/resources/categories">celestia.mobi 的附加元件</a></p>
+<p><a href="https://celestiaproject.space/forum/viewforum.php?f=23">Celestia 論壇附加元件發布區</a></p>
+<p><a href="https://discord.com/invite/WEWDcJh">Celestia 的 Discord 伺服器</a></p>
+<p><a href="https://www.celestiamotherlode.net">The Celestia Motherlode</a></p>
+<h3 id="install-celestia">安裝 Celestia</h3>
+<p>在<a
+href="/">這裡</a>可以取得最新版 Celestia。</p>
+<p>若附加元件由 celestia.mobi 提供，且目前的 Celestia 版本支援直接開啟，請點選網頁上的「在 Celestia 中開啟」。</p>
+<p>若手動下載附加元件，或目前的版本不支援直接開啟，請繼續閱讀。</p>
+<h3 id="use-the-default-add-on-folder-recommended-">使用預設附加元件資料夾（建議）</h3>
+<p>Celestia 從特定資料夾讀取附加元件與額外指令碼。在下列平台上，主資料夾名為 CelestiaResources，其中的 extras 用於附加元件，scripts 用於額外指令碼。</p>
+<h4 id="ios">iOS/iPadOS</h4>
+<p>資料夾位於 App 的共享資料夾中，可依照以下步驟查看：</p>
+<ol>
+<li>執行 Celestia 至少一次。</li>
+<li>開啟「檔案」App。</li>
+<li>切換至「瀏覽」標籤頁。</li>
+<li>點選列表中的「我的 iPhone」或「我的 iPad」。</li>
+<li>找到 Celestia 並開啟。</li>
+</ol>
+<p>裡面應該有 CelestiaResources 資料夾。</p>
+<h4 id="android" class="not-apple">Android</h4>
+<p class="not-apple">資料夾位於 App 的外部目錄 Android/data/space.celestia.mobilecelestia/files/CelestiaResources。</p>
+<p class="not-apple">在 Android 11 及更新版本中，此資料夾可能無法看見。此時可在 Android/media/space.celestia.mobilecelestia 中自行建立 CelestiaResources/extras 和 CelestiaResources/scripts。</p>
+<p class="not-apple">可在設定 -&gt; 資料位置變更附加元件的安裝位置。</p>
+<h4 id="mac-catalyst-">Mac（Catalyst）</h4>
+<p>資料夾位於 /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.MobileCelestia/Data/Documents/CelestiaResources。</p>
+<p>將 YOUR USER NAME HERE 替換成你的使用者名稱。也可以在 App 內選擇<i>工具</i>、<i>開啟附加元件資料夾</i>。</p>
+<h4 id="mac-legacy-">Mac（舊版）</h4>
+<p>資料夾位於 /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.Celestia/Data/Documents/CelestiaResources。</p>
+<p>將 YOUR USER NAME HERE 替換成你的使用者名稱。</p>
+<h4 id="windows-uwp-" class="not-apple">Windows（Microsoft Store）</h4>
+<ol class="not-apple">
+<li>執行 Celestia。</li>
+<li>檔案 -&gt; 開啟自訂資料夾</li>
+</ol>
+<p class="not-apple">裡面應該有 CelestiaResources 資料夾。路徑類似 C:\Users\YOUR USER NAME HERE\AppData\Local\Packages\40507LinfengLi.Celestia_r7f2qt5a05s84\LocalState\CelestiaResources。請將 YOUR USER NAME HERE 替換成你的使用者名稱。也可在 App 內選擇<i>工具</i>、<i>開啟附加元件資料夾</i>。</p>
+<h4 id="windows-legacy-" class="not-apple">Windows（舊版）</h4>
+<p class="not-apple">Celestia 的安裝目錄中有 extras 和 scripts 資料夾。預設安裝路徑是 C:\Program Files (x86)\Celestia 或 C:\Program Files\Celestia。</p>
+<h3 id="supply-a-directory-for-data-to-read">指定資料讀取目錄</h3>
+<p>完整的資料自訂方式請參考<a
+href="celguide://guide?guide=CA57806B-690B-CE4C-2173-B0B6079544FF">變更資料目錄</a>。</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

@@ -1,0 +1,50 @@
+<p>Celestia はすべてのプラットフォームでアドオンに対応しています。</p>
+<p>インターネット上のさまざまなサイトでアドオンを入手できます。</p>
+<p><strong>おすすめ</strong> <a
+href="/resources/categories">celestia.mobi のアドオン</a></p>
+<p><a href="https://celestiaproject.space/forum/viewforum.php?f=23">Celestia フォーラムのアドオン公開ページ</a></p>
+<p><a href="https://discord.com/invite/WEWDcJh">Celestia の Discord サーバー</a></p>
+<p><a href="https://www.celestiamotherlode.net">The Celestia Motherlode</a></p>
+<h3 id="install-celestia">Celestia をインストールする</h3>
+<p>最新の Celestia は<a
+href="/">こちら</a>から入手できます。</p>
+<p>celestia.mobi のアドオンで、利用中の Celestia が直接開く機能に対応している場合は、Web ページの「Celestia で開く」を押してください。</p>
+<p>アドオンを手動でダウンロードする場合や、利用中のバージョンが直接開く機能に対応していない場合は、続きをお読みください。</p>
+<h3 id="use-the-default-add-on-folder-recommended-">標準のアドオンフォルダを使う（推奨）</h3>
+<p>Celestia は専用フォルダからアドオンと追加スクリプトを読み込みます。次のプラットフォームでは CelestiaResources 内に、アドオン用の extras と追加スクリプト用の scripts があります。</p>
+<h4 id="ios">iOS/iPadOS</h4>
+<p>フォルダはアプリの共有フォルダ内にあります。次の手順で内容を確認できます。</p>
+<ol>
+<li>Celestia を一度以上起動します。</li>
+<li>「ファイル」アプリを開きます。</li>
+<li>「ブラウズ」タブを開きます。</li>
+<li>一覧の「この iPhone 内」または「この iPad 内」を選びます。</li>
+<li>Celestia を探して開きます。</li>
+</ol>
+<p>その中に CelestiaResources フォルダがあります。</p>
+<h4 id="android" class="not-apple">Android</h4>
+<p class="not-apple">フォルダはアプリの外部領域 Android/data/space.celestia.mobilecelestia/files/CelestiaResources にあります。</p>
+<p class="not-apple">Android 11 以降では、このフォルダが表示されない場合があります。その場合は Android/media/space.celestia.mobilecelestia 内に CelestiaResources/extras と CelestiaResources/scripts を自分で作成できます。</p>
+<p class="not-apple">アドオンのインストール先は、設定 -&gt; データの場所で変更できます。</p>
+<h4 id="mac-catalyst-">Mac（Catalyst）</h4>
+<p>フォルダは /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.MobileCelestia/Data/Documents/CelestiaResources にあります。</p>
+<p>YOUR USER NAME HERE を実際のユーザー名に置き換えてください。アプリ内の<i>ツール</i>、<i>アドオンフォルダを開く</i>からもアクセスできます。</p>
+<h4 id="mac-legacy-">Mac（従来版）</h4>
+<p>フォルダは /Users/YOUR USER NAME HERE/Library/Containers/space.celestia.Celestia/Data/Documents/CelestiaResources にあります。</p>
+<p>YOUR USER NAME HERE を実際のユーザー名に置き換えてください。</p>
+<h4 id="windows-uwp-" class="not-apple">Windows（Microsoft Store）</h4>
+<ol class="not-apple">
+<li>Celestia を起動します。</li>
+<li>ファイル -&gt; カスタムフォルダを開く</li>
+</ol>
+<p class="not-apple">開いた場所に CelestiaResources があります。パスは C:\Users\YOUR USER NAME HERE\AppData\Local\Packages\40507LinfengLi.Celestia_r7f2qt5a05s84\LocalState\CelestiaResources のようになります。YOUR USER NAME HERE を実際のユーザー名に置き換えてください。アプリ内の<i>ツール</i>、<i>アドオンフォルダを開く</i>からもアクセスできます。</p>
+<h4 id="windows-legacy-" class="not-apple">Windows（従来版）</h4>
+<p class="not-apple">Celestia のインストール先に extras と scripts フォルダがあります。標準のインストール先は C:\Program Files (x86)\Celestia または C:\Program Files\Celestia です。</p>
+<h3 id="supply-a-directory-for-data-to-read">データの読み込み元を指定する</h3>
+<p>完全なカスタマイズについては<a
+href="celguide://guide?guide=CA57806B-690B-CE4C-2173-B0B6079544FF">データの読み込み元フォルダを変更する</a>を参照してください。</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

@@ -1,0 +1,29 @@
+// English: Create, test, and share your own Celestia add-on
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "Dein eigenes Celestia-Add-on erstellen, testen und teilen";
+
+// English: Choose how you move relative to objects
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "Wähle, wie du dich relativ zu Objekten bewegst";
+
+// English: Connect a gamepad and customize its controls
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "Einen Controller verbinden und seine Steuerung anpassen";
+
+// English: Lua-based scripting API reference for Celestia
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "Referenz der Lua-basierten Skript-API von Celestia";
+
+// English: Set the date to the mission's active period
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "Das Datum auf die aktive Missionszeit einstellen";
+
+// English: Run scripts, save bookmarks, and open Celestia links
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "Skripte ausführen, Lesezeichen speichern und Celestia-Links öffnen";
+
+// English: Touch, mouse, keyboard, gamepad, and joystick
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Touch, Maus, Tastatur, Gamecontroller und Joystick";
+
+// English: Use your own Celestia data and configuration files
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Eigene Celestia-Daten und Konfigurationsdateien verwenden";
+
+// English: Install add-ons and scripts on your device
+"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "Add-ons und Skripte auf deinem Gerät installieren";
+
+// English: Write CEL and CELX scripts to run in Celestia
+"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "CEL- und CELX-Skripte schreiben und in Celestia ausführen";

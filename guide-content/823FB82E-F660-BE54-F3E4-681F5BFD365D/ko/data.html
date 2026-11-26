@@ -1,0 +1,35 @@
+
+<figure style="margin-left:0;margin-right:0"><div class="table-scroll" tabindex="0"><table class="mobile-only">
+    <style>.tutorial-icon { width:32px;height:32px } .theme-dark .tutorial-icon { filter:invert(1) }</style>
+    <tr>
+        <td><img class="tutorial-icon" src="{0}"></td>
+        <td>사이드바의 모드 버튼을 눌러 천체 모드와 카메라 모드를 전환하세요.</td>
+    </tr>
+    <tr>
+        <td rowspan="2"><img class="tutorial-icon" src="{1}"></td>
+        <td>천체 모드에서 드래그하면 천체 주위를 회전합니다.</td>
+    </tr>
+    <tr>
+        <td>두 손가락을 벌리거나 오므려 천체를 확대하거나 축소하세요.</td>
+    </tr>
+    <tr>
+        <td rowspan="2"><img class="tutorial-icon" src="{2}"></td>
+        <td>카메라 모드에서 드래그하면 시야 방향이 바뀝니다.</td>
+    </tr>
+    <tr>
+        <td>두 손가락을 벌리거나 오므려 시야를 확대하거나 축소하세요.</td>
+    </tr>
+    <script>
+        const iconElements = document.getElementsByClassName('tutorial-icon');
+        for (let i = 0; i < iconElements.length; i++) {
+            iconElements[i].src = iconElements[i].src.replace('$%7Bf%7D', 'icon.svg');
+        }
+    </script>
+</table></div></figure>
+<p></p>
+<style>.tutorial-button { width:100%;text-align:center; } .catalyst .mobile-only { display:none } .uwp .mobile-only { display:none } .xbox .mobile-only { display:none }</style>
+<script>function runDemoScript() { Celestia.sendMessage("runDemo", JSON.stringify({}), 4);}</script>
+<p><button onclick="runDemoScript()" class="button-filled tutorial-button">데모 실행</button></p>
+<p><button onclick="location.href='celguide://guide?guide=BE1B5023-46B6-1F10-F15F-3B3F02F30300'" class="button-filled tutorial-button">입력 조작 참고 문서</button></p>
+<p><button onclick="location.href='celguide://guide?guide=D1A96BFA-00BB-0089-F361-10DD886C8A4F'" class="button-filled tutorial-button">애드온과 스크립트 사용하기</button></p>
+<p><button onclick="location.href='celguide://guide?guide=A0AB3F01-E616-3C49-0934-0583D803E9D0'" class="button-filled tutorial-button">스크립트와 URL</button></p>

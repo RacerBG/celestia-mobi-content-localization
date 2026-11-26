@@ -1,0 +1,49 @@
+<p>O Celestia permite personalização completa. Você pode substituir a pasta de onde ele lê os dados.</p>
+<p>Em todas as plataformas, primeiro baixe uma cópia da pasta de dados da versão correspondente do Celestia.</p>
+<ol>
+<li>Baixe <a href="https://github.com/celestiamobile/Celestia/releases">aqui</a> a pasta de dados original da sua versão do aplicativo.</li>
+<li>Modifique a pasta e o arquivo celestia.cfg.</li>
+</ol>
+<p>Depois…</p>
+<h3 id="android" class="not-apple">Android</h3>
+<ol class="not-apple">
+<li>Copie a pasta para o dispositivo, dentro de Android/data/space.celestia.mobilecelestia/files ou Android/media/space.celestia.mobilecelestia. Renomeie-a se necessário para evitar conflito com a pasta padrão CelestiaResources.</li>
+<li>Execute o Celestia e abra Configurações -&gt; Localização dos dados.</li>
+<li>Escolha a localização da pasta de dados (CelestiaResources) e do arquivo de configuração (celestia.cfg).</li>
+<li>Feche o Celestia e execute-o novamente.</li>
+</ol>
+<h3 id="ios-macos-catalyst-">iOS/iPadOS/macOS (Catalyst)</h3>
+<ol>
+<li>Copie a pasta para qualquer local no dispositivo.</li>
+<li>Execute o Celestia e abra Configurações -&gt; Localização dos dados.</li>
+<li>Escolha a localização da pasta de dados (CelestiaResources) e do arquivo de configuração (celestia.cfg).</li>
+<li>Feche o Celestia e execute-o novamente.</li>
+</ol>
+<h3 id="macos-legacy-">macOS (versão clássica)</h3>
+<ol>
+<li>Copie a pasta para qualquer local no dispositivo.</li>
+<li>Execute o Celestia e abra, na barra de menus, Celestia -&gt; Alterar arquivo de configuração.</li>
+<li>Escolha a localização da pasta de dados (CelestiaResources) e do arquivo de configuração (celestia.cfg).</li>
+<li>Clique em «Confirmar e reiniciar». Observe que você precisa reiniciar o aplicativo por conta própria.</li>
+</ol>
+<h3 id="windows-uwp-" class="not-apple">Windows (Microsoft Store)</h3>
+<p class="not-apple">Para a versão 2.1.18.0 ou posterior, siga estas etapas:</p>
+<ol class="not-apple">
+<li>Copie a pasta para qualquer local no dispositivo.</li>
+<li>Execute o Celestia e abra Arquivo -&gt; Configurações -&gt; Localização dos dados.</li>
+<li>Escolha a localização da pasta de dados (CelestiaResources) e do arquivo de configuração (celestia.cfg).</li>
+<li>Feche o Celestia e execute-o novamente.</li>
+</ol>
+<p class="not-apple">Para versões anteriores:</p>
+<ol class="not-apple">
+<li>Renomeie CelestiaResources para Override.</li>
+<li>Execute o Celestia e escolha Arquivo -&gt; Abrir pasta personalizada.</li>
+<li>O explorador de arquivos será aberto. Copie a pasta Override para esse local.</li>
+<li>Feche o Celestia e execute-o novamente.</li>
+</ol>
+<p class="not-apple">Se os arquivos de configuração e dados estiverem corretos, o Celestia deverá carregar seus arquivos.</p>
+<script type="text/javascript">
+    let bodyClassList = window.document.body.classList;
+    if (bodyClassList.contains("ios") || bodyClassList.contains("catalyst") || bodyClassList.contains("visionos"))
+        document.querySelectorAll(".not-apple").forEach(el => el.remove());
+</script>

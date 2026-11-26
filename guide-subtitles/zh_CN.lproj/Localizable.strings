@@ -5,7 +5,7 @@
 //"06720596-C2D4-B873-D446-70D48B3E7F2C" = "Discoveries span 3,759 star systems";
 
 // English: Write CEL and CELX scripts to run in Celestia
-//"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "Write CEL and CELX scripts to run in Celestia";
+"105B2DE9-9D99-C9C0-478F-171BB21ED979" = "编写可在 Celestia 中运行的 CEL 和 CELX 脚本";
 
 // English: Explore with the full Celestia data set in your browser
 //"13867212-3685-4D11-8068-B990C0C6EFFE" = "Explore with the full Celestia data set in your browser";
@@ -47,16 +47,16 @@
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "2022 EB5 discovered 2 hours before impact near Iceland";
 
 // English: Set the date to the mission's active period
-//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "Set the date to the mission's active period";
+"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "将日期设为任务的活动期间";
 
 // English: Lua-based scripting API reference for Celestia
-//"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "Lua-based scripting API reference for Celestia";
+"6F7D2F2A-BD35-924D-D068-2B7E61022445" = "基于 Lua 的 Celestia 脚本 API 参考";
 
 // English: Choose how you move relative to objects
-//"7013117F-362E-7138-59BB-B9ED52ADECF1" = "Choose how you move relative to objects";
+"7013117F-362E-7138-59BB-B9ED52ADECF1" = "选择相对于天体的移动方式";
 
 // English: Connect a gamepad and customize its controls
-//"72B827A7-7164-6A3E-2557-4C164E14E95C" = "Connect a gamepad and customize its controls";
+"72B827A7-7164-6A3E-2557-4C164E14E95C" = "连接游戏手柄并自定义操作";
 
 // English: Double gravity assist on the way to Jupiter
 //"7BC89DB4-893A-45A3-9B27-B24C83BD85FD" = "Double gravity assist on the way to Jupiter";
@@ -71,7 +71,7 @@
 //"85C0B69E-FBFC-4A58-9B11-1BC666ED1C7D" = "The third known interstellar object in the Solar System";
 
 // English: Create, test, and share your own Celestia add-on
-//"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "Create, test, and share your own Celestia add-on";
+"8EC3F332-AC7F-4E6D-B6EB-055AD131C968" = "创建、测试并分享自己的 Celestia 插件";
 
 // English: First image of the Milky Way's central black hole
 //"92DB1F10-899E-E5E4-D997-19EA8018AA8F" = "First image of the Milky Way's central black hole";
@@ -83,7 +83,7 @@
 //"99D012D7-27E8-D664-48BB-18C03C082AF3" = "Second uncrewed flight to the ISS ends successfully";
 
 // English: Run scripts, save bookmarks, and open Celestia links
-//"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "Run scripts, save bookmarks, and open Celestia links";
+"A0AB3F01-E616-3C49-0934-0583D803E9D0" = "运行脚本、保存书签并打开 Celestia 链接";
 
 // English: IAU invites names for 20 exoplanetary systems
 //"B0B3F307-A97A-9012-08B4-C2F19B20AF8B" = "IAU invites names for 20 exoplanetary systems";
@@ -92,13 +92,13 @@
 //"B8EF9369-FBDA-9E2A-5D67-46DED6B7BDFA" = "Uncrewed replacement will extend the ISS stay to a year";
 
 // English: Touch, mouse, keyboard, gamepad, and joystick
-//"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Touch, mouse, keyboard, gamepad, and joystick";
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "触摸、鼠标、键盘、游戏手柄和操纵杆";
 
 // English: Voyager's project scientist steps down after 50 years
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Voyager's project scientist steps down after 50 years";
 
 // English: Use your own Celestia data and configuration files
-//"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Use your own Celestia data and configuration files";
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "使用自己的 Celestia 数据和配置文件";
 
 // English: 4 astronauts chosen for a crewed lunar flyby
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "4 astronauts chosen for a crewed lunar flyby";
@@ -110,7 +110,7 @@
 //"D05707AB-99FE-4693-A623-0DE1CA68DE85" = "Views from the world's largest digital camera";
 
 // English: Install add-ons and scripts on your device
-//"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "Install add-ons and scripts on your device";
+"D1A96BFA-00BB-0089-F361-10DD886C8A4F" = "在设备上安装插件和脚本";
 
 // English: A new view of galaxies, nebulae and exoplanets
 //"D631521A-E9AA-1E31-4101-8F6E10C239BB" = "A new view of galaxies, nebulae and exoplanets";
