@@ -1,7 +1,7 @@
-<div style="overflow:hidden;display:flex;align-items:center;justify-content:flex-start;">
-  <div class="tab">
-    <button id="youtube-tab" class="tablinks active" onclick="selectYouTube()">YouTube</button>
-    <button id="bilibili-tab" class="tablinks" onclick="selectBilibili()">Bilibili</button>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:flex-start;">
+  <div class="segmented-control">
+    <button id="youtube-tab" type="button" class="segmented-control-button active" onclick="selectYouTube()">YouTube</button>
+    <button id="bilibili-tab" type="button" class="segmented-control-button" onclick="selectBilibili()">Bilibili</button>
   </div>
 </div>
 <p class="video-box" id="youtube-video" style="display:block;margin-top:10px;"><iframe src="https://www.youtube.com/embed/5x0c7wNDJks" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></p>

@@ -1,7 +1,7 @@
-<div style="overflow:hidden;display:flex;align-items:center;justify-content:space-between;">
-  <div class="tab">
-    <button id="cel-tab" class="tablinks active" onclick="selectCEL()">CEL</button>
-    <button id="celx-tab" class="tablinks" onclick="selectCELX()">CELX</button>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+  <div class="segmented-control">
+    <button id="cel-tab" type="button" class="segmented-control-button active" onclick="selectCEL()">CEL</button>
+    <button id="celx-tab" type="button" class="segmented-control-button" onclick="selectCELX()">CELX</button>
   </div>
   <button onclick="runCurrentCode()" class="button-outline">Изпълни</button>
 </div>
@@ -10,6 +10,7 @@
 }</p>
 <p class="editor-box" id="editor2" style="display:none;margin-top:10px;">celestia:select(celestia:find("Sol"))</p>
 <p>Научете повече за скриптовете в „Celestia“ <a href="https://en.wikibooks.org/wiki/Celestia/Scripting">тук</a>.</p>
+<p><a href="celguide://guide?guide=6F7D2F2A-BD35-924D-D068-2B7E61022445">Документация за скриптовете CELX</a></p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.5/ace.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
   var editor1 = ace.edit("editor1");
