@@ -116,7 +116,7 @@
 //"6D4AAA02-607D-DE61-DE81-61A3335F955E" = "Asteroid Found Before Impact";
 
 // English: View Missing Spacecraft
-"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "Търсене на невидимите космически апарати в „Celestia“?";
+//"6E1BB6B2-178D-F3DF-0C25-E7DE6741CBB5" = "View Missing Spacecraft";
 
 // English: CELX Scripting Documentation
 "6F7D2F2A-BD35-924D-D068-2B7E61022445" = "Документация за скриптовете CELX";
@@ -194,13 +194,13 @@
 "B9E7043E-8297-C307-3D20-A339992FC582" = "Мисията Касини";
 
 // English: Controls Reference
-"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Контрол с докосване, мишка, клавиатура и контролер или джойстик";
+"BE1B5023-46B6-1F10-F15F-3B3F02F30300" = "Справочник за управление";
 
 // English: Ed Stone Retires
 //"C7C92C55-8321-758A-AF1B-B49A64CC6E63" = "Ed Stone Retires";
 
 // English: Custom Data Directory
-"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Замяна на папката с данни за четене";
+"CA57806B-690B-CE4C-2173-B0B6079544FF" = "Собствена папка с данни";
 
 // English: Artemis II Crew Revealed
 //"CCC152D6-5496-AEE4-58D1-BFAD11905100" = "Artemis II Crew Revealed";
