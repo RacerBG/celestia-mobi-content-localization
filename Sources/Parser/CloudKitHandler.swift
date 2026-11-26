@@ -52,33 +52,22 @@ public class CloudKitHandler {
             throw CloudKitHandlerError.dataMissing
         }
         let record = try recordResult.get()
-        let newRecord = CKRecord(recordType: record.recordType, recordID: CKRecord.ID(recordName: dataInformation.targetId))
-        let temporaryDirectory = NSTemporaryDirectory()
-        for key in record.allKeys() {
-            guard let value = record[key] else {
-                throw CloudKitHandlerError.dataMissing
-            }
-            if let asset = value as? CKAsset {
-                let data = try await AsyncDataRequestHandler.get(url: asset.fileURL.absoluteString, httpClient: httpClient)
-                let tempPath = (temporaryDirectory as NSString).appendingPathComponent(UUID().uuidString)
-                let fileURL = URL(fileURLWithPath: tempPath)
-                try data.write(to: fileURL)
-                newRecord[key] = CKAsset(fileURL: fileURL)
-            } else if let assets = value as? [CKAsset] {
-                var newAssets = [CKAsset]()
-                for asset in assets {
-                    let data = try await AsyncDataRequestHandler.get(url: asset.fileURL.absoluteString, httpClient: httpClient)
-                    let tempPath = (temporaryDirectory as NSString).appendingPathComponent(UUID().uuidString)
-                    let fileURL = URL(fileURLWithPath: tempPath)
-                    try data.write(to: fileURL)
-                    newAssets.append(CKAsset(fileURL: fileURL))
+        let assetDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer {
+            if FileManager.default.fileExists(atPath: assetDirectory.path) {
+                do {
+                    try FileManager.default.removeItem(at: assetDirectory)
+                } catch {
+                    print("Failed to clean up duplicated assets: \(error.localizedDescription)")
                 }
-                newRecord[key] = newAssets
-            } else {
-                newRecord[key] = value
             }
         }
-        newRecord[dataKey] = dataInformation.data
+        let newRecord = try await makeLocalizedRecord(
+            from: record, targetId: dataInformation.targetId, dataKey: dataKey,
+            data: dataInformation.data, assetDirectory: assetDirectory
+        ) { url in
+            try await AsyncDataRequestHandler.get(url: url.absoluteString, httpClient: httpClient)
+        }
         let recordDuplicateResults = try await db.modifyRecords(saving: [newRecord], deleting: [], savePolicy: .allKeys)
         guard let recordDuplicateResult = recordDuplicateResults.saveResults[newRecord.recordID] else {
             throw CloudKitHandlerError.dataMissing
@@ -118,6 +107,39 @@ public class CloudKitHandler {
         case .failure(let error):
             throw error
         }
+    }
+
+    func makeLocalizedRecord(
+        from record: CKRecord, targetId: String, dataKey: String, data: Data,
+        assetDirectory: URL, loadAsset: (URL) async throws -> Data
+    ) async throws -> CKRecord {
+        let newRecord = CKRecord(recordType: record.recordType, recordID: CKRecord.ID(recordName: targetId))
+        try FileManager.default.createDirectory(at: assetDirectory, withIntermediateDirectories: true)
+        for key in record.allKeys() {
+            guard let value = record[key] else {
+                throw CloudKitHandlerError.dataMissing
+            }
+            // Empty lists can cast to any element type; retain their CloudKit field type.
+            if let asset = value as? CKAsset {
+                let assetData = try await loadAsset(asset.fileURL)
+                let fileURL = assetDirectory.appendingPathComponent(UUID().uuidString)
+                try assetData.write(to: fileURL)
+                newRecord[key] = CKAsset(fileURL: fileURL)
+            } else if let assets = value as? [CKAsset], !assets.isEmpty {
+                var newAssets = [CKAsset]()
+                for asset in assets {
+                    let assetData = try await loadAsset(asset.fileURL)
+                    let fileURL = assetDirectory.appendingPathComponent(UUID().uuidString)
+                    try assetData.write(to: fileURL)
+                    newAssets.append(CKAsset(fileURL: fileURL))
+                }
+                newRecord[key] = newAssets
+            } else {
+                newRecord[key] = value
+            }
+        }
+        newRecord[dataKey] = data
+        return newRecord
     }
 
     public func duplicateData(dataInformations: [(data: Data, targetId: String, language: String, reference: String, id: String)], mainKey: String, dataKey: String, httpClient: any RequestClient) async throws {
