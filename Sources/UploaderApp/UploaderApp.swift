@@ -58,9 +58,6 @@ struct UploaderApp: AsyncParsableCommand {
     @Option
     var keywordsKey: String?
 
-    @Option(help: "JSON asset removal policies keyed by guide ID; applies to changed existing HTML records.")
-    var assetRemovalPoliciesPath: String?
-
     func run() async throws {
         let parser = Parser()
 
@@ -81,21 +78,7 @@ struct UploaderApp: AsyncParsableCommand {
             if let dataKey {
                 let oldDataCollection = try parser.parseDataDirectory(at: oldPath)
                 let newDataCollection = try parser.parseDataDirectory(at: newPath)
-                let assetRemovalPolicies: [String: AssetRemovalPolicy]
-                if let assetRemovalPoliciesPath {
-                    let policyData = try Data(contentsOf: URL(fileURLWithPath: assetRemovalPoliciesPath))
-                    assetRemovalPolicies = try JSONDecoder().decode([String: AssetRemovalPolicy].self, from: policyData)
-                    for (guide, policy) in assetRemovalPolicies {
-                        guard newDataCollection[guide] != nil else {
-                            throw ActionError.unsupported
-                        }
-                        try policy.validate()
-                    }
-                } else {
-                    assetRemovalPolicies = [:]
-                }
                 var dataById = [String: Data]()
-                var policiesById = [String: AssetRemovalPolicy]()
                 var dataToDuplicate = [(data: Data, targetId: String, language: String, reference: String, id: String)]()
                 for (id, newData) in newDataCollection {
                     guard newData.new.isEmpty else {
@@ -114,9 +97,6 @@ struct UploaderApp: AsyncParsableCommand {
                             }
                             if dataWithId.data != oldDataWithId.data {
                                 dataById[dataWithId.id] = dataWithId.data
-                                if let policy = assetRemovalPolicies[id] {
-                                    policiesById[dataWithId.id] = policy
-                                }
                             }
                         } else {
                             dataToDuplicate.append((dataWithId.data, dataWithId.id, language, newData.reference, id))
@@ -124,25 +104,12 @@ struct UploaderApp: AsyncParsableCommand {
                     }
                 }
                 if !dataById.isEmpty {
-                    let ordinaryUpdates = dataById.filter { policiesById[$0.key] == nil }
-                    if !ordinaryUpdates.isEmpty {
-                        try await handler.uploadDataChanges(dataById: ordinaryUpdates, dataKey: dataKey)
-                    }
-                    let assetUpdates = dataById.filter { policiesById[$0.key] != nil }
-                    if !assetUpdates.isEmpty {
-                        try await handler.uploadDataChangesRemovingAssets(
-                            dataById: assetUpdates, policiesById: policiesById,
-                            dataKey: dataKey, httpClient: httpClient
-                        )
-                    }
+                    try await handler.uploadDataChanges(dataById: dataById, dataKey: dataKey)
                 }
                 if !dataToDuplicate.isEmpty {
                     try await handler.duplicateData(dataInformations: dataToDuplicate, mainKey: mainKey, dataKey: dataKey, httpClient: httpClient)
                 }
             } else {
-                guard assetRemovalPoliciesPath == nil else {
-                    throw ActionError.unsupported
-                }
                 let oldStringsByLocales = try parser.parseDirectory(at: oldPath)
                 let newStringsByLocales = try parser.parseDirectory(at: newPath)
                 let oldStringsByKeys = try parser.convertToStringsByKeys(oldStringsByLocales)

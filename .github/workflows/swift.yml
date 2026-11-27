@@ -294,14 +294,9 @@ jobs:
           exit 0
         fi
         cp -r guide-content new-guide-content
-        ASSET_REMOVAL_OPTIONS=()
-        if [ -f guide-asset-removals.json ]; then
-          cp guide-asset-removals.json "$RUNNER_TEMP/guide-asset-removals.json"
-          ASSET_REMOVAL_OPTIONS=(--asset-removal-policies-path "$RUNNER_TEMP/guide-asset-removals.json")
-        fi
         CURRENT_COMMIT=`git show -s --format='%H'`
         git reset --hard HEAD^
-        .build/debug/UploaderApp guide-content new-guide-content localizedHTMLReferences data --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID "${ASSET_REMOVAL_OPTIONS[@]}"
+        .build/debug/UploaderApp guide-content new-guide-content localizedHTMLReferences data --key-file-path $RUNNER_TEMP/key.pem --key-id $CLOUDKIT_KEY_ID
         git reset --hard $CURRENT_COMMIT
 
     - name: Upload (Featured Item Titles)
