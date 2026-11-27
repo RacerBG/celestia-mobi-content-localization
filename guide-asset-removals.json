@@ -1,0 +1,10 @@
+{
+  "113C3057-6A98-B4BC-A794-DA8F3AA2F793": {
+    "assetNamesToRemove": [
+      "celestia-1.6.4.tar.xz",
+      "celestia-1.6.4-macOS.zip",
+      "celestia-1.6.4.exe"
+    ],
+    "expectedRemainingAssetCount": 6
+  }
+}

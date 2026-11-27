@@ -1,0 +1,19 @@
+<p>这里提供 Celestia 常见问题的解答。你也可以访问 Celestia 的 <a href="https://en.m.wikibooks.org/wiki/Celestia">维基教科书页面</a>，获取更多资料。</p>
+<h4 id="expand-content">如何扩充 Celestia 的内容？</h4>
+<p>Celestia 支持插件。插件是社区制作的内容，用于丰富 Celestia。关于插件的获取途径和使用方法，请参阅<a href="celguide://guide?guide=D1A96BFA-00BB-0089-F361-10DD886C8A4F">使用插件和脚本</a>。</p>
+<h4 id="modify-configuration">如何修改 Celestia 的配置或数据？</h4>
+<p>现代版本的 Celestia 应用程序包目录不可写入，因此无法直接修改默认的 celestia.cfg 文件或数据目录。不过，你可以按照<a href="celguide://guide?guide=CA57806B-690B-CE4C-2173-B0B6079544FF">自定义数据目录</a>的说明，让 Celestia 使用自己的 celestia.cfg 文件和数据文件夹启动，而不是使用默认文件。</p>
+<h4 id="create-addons">我想制作自己的插件，该如何开始？</h4>
+<p>请参阅<a href="celguide://guide?guide=8EC3F332-AC7F-4E6D-B6EB-055AD131C968">制作插件</a>，了解如何制作自己的插件。</p>
+<h4 id="download-all-addons">如何下载 celestia.mobi 上的所有插件？</h4>
+<p>Celestia 不提供批量下载多个插件的方式，我们也不建议这样做。<br>某些插件可能会相互冲突，导致 Celestia 无法启动或无法正常运行。安装过多插件也会显著降低 Celestia 的运行速度。</p>
+<h4 id="report-errors">Celestia 的数据或应用本身有错误，该如何报告？</h4>
+<p>如果发现插件有错误，请在 <a href="https://github.com/celestiamobile/celestia-addon-validator/issues">celestiamobile/celestia-addon-validator</a> 提交问题。<br> 如果错误来自 Celestia 自带的数据而非插件，请在 <a href="https://github.com/CelestiaProject/CelestiaContent/issues">CelestiaProject/CelestiaContent</a> 提交问题。<br> 如果要报告程序本身的问题，可以在应用内通过“发送反馈”→“报告错误”，或“帮助”→“报告错误”提交。</p>
+<h4 id="missing-objects">为什么在 Celestia 中找不到某个天体？</h4>
+<p>Celestia 应用的数据不是最新的，这通常是找不到新闻中提到的天体的原因。社区可能已为该天体制作了插件，你可以浏览在线插件进行查找。另外，Celestia 的搜索功能只搜索恒星、深空天体以及最近恒星系统中的天体，因此可能需要先前往目标天体所在的恒星系统。</p>
+<h4 id="android-addon-folder">如何在 Android 11 或更高版本中访问插件文件夹？</h4>
+<p>默认情况下，插件安装在 Android/data 中，而 Android 11 限制了文件管理器对该目录的访问。不过，Celestia 1.7.8 或更高版本支持将 Android/media 用作插件的默认文件夹。<br> 要更改默认文件夹，请前往“设置”→“数据位置”，然后选择“迁移插件数据”。请务必在迁移前备份数据，以免丢失。</p>
+<h4 id="change-language">如何更改 Celestia 的显示语言？</h4>
+<p>默认情况下，Celestia 使用系统语言。在 Android/Windows 上，可以在设置中选择其他语言。在支持为应用单独设置语言的系统（Android 13 或更高版本、iOS 和 macOS）上，可以在系统设置中更改 Celestia 的显示语言。通常需要重新启动 Celestia，才能使更改生效。</p>
+<h4 id="virtual-display-casting">Android 上的虚拟显示器（投屏）如何工作？</h4>
+<p>Celestia 1.9.8 或更高版本支持在物理外接显示器和虚拟显示器上显示内容。虚拟显示器并未连接到设备，而是由系统创建，适合向电视或投影仪投屏。不过，各厂商的投屏实现方式不同，Celestia 可能无法在所有设备上按预期工作，因此虚拟显示器显示功能默认关闭，可以在设置中启用。 <br>使用 Google Cast 时，GMS Cast Receiver 的一个问题会将无效的虚拟显示器作为投屏目标传递给 Celestia。为保证投屏稳定，请先开始投屏，再启动 Celestia。断开投屏会话后，可能需要重新启动 Android，才能清除无效的虚拟显示器。</p>
