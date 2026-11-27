@@ -1,0 +1,629 @@
+<script type="text/javascript" src="{0}"></script>
+<p>필수로 표시된 모든 항목을 입력하세요. 선택 항목은 꼭 필요한 경우에만 입력하세요. 반드시 필요하지 않은 선택 항목을 입력하면 애드온 제출이 거부됩니다.</p>
+<div class="stack"><div id="github-sign-in-button" class="action-row" style="display:none;"><button class="button-filled" id="github-sign-in-button-button">GitHub로 로그인</button></div>
+<div id="addon-submission-area" class="stack"><div id="addon-submission-form" class="form-fields stack"></div><div class="action-row form-actions"><button id="addon-submit-button" disabled class="button-filled">제출</button></div><p id="addon-submission-status" class="feedback feedback-info" role="status" aria-live="polite" style="display:none;"></p><progress id="addon-submission-progress" class="form-progress" value="0" max="100" aria-label="업로드 진행 상황" style="display:none;"></progress></div>
+<p id="error-information-text" class="feedback feedback-error" role="alert" style="display:none;"></p></div>
+<script>"use strict";</script>
+<script>CelestiaCloudKitManager = {};</script>
+<script>
+CelestiaCloudKitManager.page = (function() {
+  var self = {};
+  self.authorCount = 0;
+  self.setStatusKind = function(kind) {
+    document.getElementById('addon-submission-status').className = `feedback feedback-${kind}`;
+  };
+  self.createListIcon = function(add) {
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute('focusable', 'false');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', add ? 'M12 5v14M5 12h14' : 'M5 12h14');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-linecap', 'round');
+    icon.appendChild(path);
+    return icon;
+  };
+  self.showErrorText = function(text) {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'block';
+    errorElement.innerText = text;
+  };
+  self.showError = function(error) {
+    // First log to the console in case anyone needs a stack trace.
+    console.error(error);
+    self.showErrorText(error.message || '오류가 발생했습니다.');
+  };
+  self.hideError = function() {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'none';
+  }
+  return self;
+})();
+
+CelestiaCloudKitManager.loadCategories = function() {
+  fetch('/api/resource/categories?lang=ko').then(function(response) {
+    if (!response.ok) {
+      CelestiaCloudKitManager.page.showErrorText('카테고리 정보를 가져오지 못했습니다');
+      return null;
+    }
+    return response.json();
+  }).then(function (data) {
+    if (!data) return;
+    if (data.status != 0 || !data.info || !data.info.detail) {
+      if (data.info && data.info.reason) {
+        CelestiaCloudKitManager.page.showErrorText(data.info.reason)
+      } else {
+        CelestiaCloudKitManager.page.showErrorText('카테고리 정보를 가져오는 중 알 수 없는 오류가 발생했습니다')
+      }
+      return;
+    }
+    const categories = JSON.parse(data.info.detail);
+    CelestiaCloudKitManager.onDataFetched([{ name: '없음', id: '' }].concat(categories));
+  }).catch(function(error) {
+    console.error(error);
+    CelestiaCloudKitManager.page.showErrorText('카테고리 정보를 가져오지 못했습니다');
+  });
+}
+
+CelestiaCloudKitManager.onDataFetched = function(categories) {
+  const submissionElements = [
+    { key: 'remove', display: '이 애드온을 삭제하시겠습니까?', elementName: 'submission-remove', type: 'checkbox', hint: '이 애드온의 삭제를 요청합니다', overrideFilename: 'category', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; } },
+    { key: 'title', display: '제목', elementName: 'submission-title', type: 'short-text', hint: '새 애드온에 필수', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'category', display: '카테고리', elementName: 'submission-category', type: 'reference-select', values: categories, hint: '새 애드온에 필수. 카테고리 ID', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'type', display: '유형', elementName: 'submission-type', type: 'text-select', values: [{ name: '없음', id: 'none' }, { name: '애드온', id: 'addon' }, { name: '스크립트', id: 'script' }], hint: '스크립트 애드온은 \'스크립트\'를 선택하세요. 애드온 업데이트 시에는 \'없음\'이어야 하며, 새 애드온을 만들 때는 \'없음\'이 아닌 항목을 선택해야 합니다', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'id_requirement', display: '애드온 ID', elementName: 'submission-id-requirement', type: 'short-text', hint: '기존 애드온을 업데이트하거나 삭제할 때 필수입니다. 업데이트 시에는 여기에 전체 애드온 ID를 입력하고, 다른 항목은 변경된 것만 입력하세요' },
+    { key: 'authors', display: '제작자', elementName: 'submission-authors', type: 'short-text-list', hint: '새 애드온에 필수. 애드온 제작자', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_publish_time', display: '최초 공개일', elementName: 'submission-original-publish-time', type: 'date', hint: '선택 사항. 원본 출처에서 애드온이 처음 공개된 날짜입니다. 알 수 없거나 변경되지 않았다면 비워 두세요', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_url', display: '원본 URL', elementName: 'submission-original-url', type: 'short-text', hint: '선택 사항. 애드온의 원본 출처로 연결되는 HTTP 또는 HTTPS 링크입니다. 알 수 없거나 변경되지 않았다면 비워 두세요', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'remove_dependencies', display: '의존성 요구 사항 제거', elementName: 'submission-remove-dependencies', type: 'checkbox', hint: '의존성 요구 사항을 제거하려면 이 체크박스를 선택하세요', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }, targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'dependencies', display: '의존성', elementName: 'submission-dependencies', type: 'short-text-list', hint: '이 애드온이 의존하는 애드온의 ID', targetCheckBox: ['submission-remove', 'submission-remove-dependencies'], targetCheckBoxValue: [false, false] },
+    { key: 'rank', display: '정렬 우선순위', elementName: 'submission-rank', type: 'int', hint: '일반 애드온은 비워 두세요. 우선순위 0으로 처리됩니다. 사용자 지정 표시 순서가 꼭 필요한 경우에만 우선순위를 지정하세요. 우선순위가 높은 애드온이 카테고리에서 먼저 표시됩니다', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'description', display: '설명', elementName: 'submission-description', type: 'long-text', hint: '새 애드온에 필수. 애드온의 일반 텍스트 설명', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'demo_object_name', display: '시연용 객체 이름', elementName: 'submission-demo-object-name', type: 'short-text', hint: '\'이동\'에 사용할 객체 경로입니다. 입력한다면 이 애드온의 ssc/stc/dsc 파일에 정의된 객체 또는 그 상위 객체와 일치해야 하며, 경로 형식이어야 합니다(예: Sol/Earth/Moon)', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['addon', 'none'] },
+    { key: 'main_script_name', display: '주 스크립트 이름', elementName: 'submission-main-script-name', type: 'short-text', hint: '주 스크립트 파일의 이름', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['script', 'none'] },
+    { key: 'cover_image', display: '대표 이미지', elementName: 'submission-cover-image', type: 'file', hint: '새 애드온에 필수', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'jpg'},
+    { key: 'addon', display: '애드온', elementName: 'submission-addon', type: 'file', hint: '새 애드온에 필수', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'zip' },
+    { key: 'remove_rich_description', display: '기존 서식 있는 설명을 제거하시겠습니까?', elementName: 'submission-remove-rich-description', type: 'checkbox', hint: '서식 있는 설명을 제거하려면 이 체크박스를 선택하세요. 애드온 업데이트 시에만 유효합니다', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }},
+    { key: 'rich_description', display: '서식 있는 설명을 포함하시겠습니까?', elementName: 'submission-rich-description', type: 'checkbox', ignored: true, targetCheckBox: ['submission-remove', 'submission-remove-rich-description'], targetCheckBoxValue: [false, false] },
+    { key: 'rich_description_base', display: '서식 있는 설명 텍스트', elementName: 'submission-rich-description-base', type: 'long-text', hint: 'HTML을 지원합니다. 입력하지 않으면 아래의 모든 항목이 무시됩니다. 애드온 링크에는 celaddon://item?item=ADDON_ID를, 문서 링크에는 celguide://guide?guide=ARTICLE_ID를 사용하세요', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/base' },
+    { key: 'rich_description_notes', display: '참고 사항', elementName: 'submission-rich-description-notes', type: 'long-text-list', hint: 'HTML 지원', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/notes' },
+    { key: 'rich_description_note_type', display: '참고 사항 유형', elementName: 'submission-rich-description-note-type', type: 'text-select', values: [{ name: '참고', id: 'note' }, { name: '중요', id: 'important' }, { name: '경고', id: 'warning' }], hint: '참고 사항이 있을 때만 사용하는 유형입니다. 중요한 참고 사항은 노란색 배경으로, 경고는 빨간색 배경으로 표시됩니다', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/note_type' },
+    { key: 'rich_description_cover_image', display: '대표 이미지', elementName: 'submission-rich-description-cover-image', type: 'file', hint: '서식 있는 설명을 입력할 때 필수', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image', fileExtension: 'jpg' },
+    { key: 'rich_description_cover_image_caption', display: '대표 이미지 설명', elementName: 'submission-rich-description-cover-image-caption', type: 'long-text', hint: 'HTML 지원', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image' },
+    { key: 'rich_description_detail_images', display: '상세 이미지', elementName: 'submission-rich-description-detail-images', type: 'file-list', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', fileExtension: 'jpg' },
+    { key: 'rich_description_detail_image_captions', display: '상세 이미지 설명', elementName: 'submission-rich-description-detail-image-captions', type: 'long-text-list', hint: 'HTML을 지원합니다. 위 상세 이미지의 설명을 이미지와 같은 순서로 입력하세요. 설명이 필요 없는 이미지는 해당 항목을 비워 두세요', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', listFileMode: 'separate' },
+    { key: 'rich_description_youtube_ids', display: 'YouTube ID', elementName: 'submission-rich-description-youtube-ids', type: 'short-text-list', hint: 'YouTube 동영상 ID', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/youtube_ids' },
+    { key: 'rich_description_additional_leading', display: '추가 도입 내용', elementName: 'submission-rich-description-additional-leading', type: 'long-text', hint: 'HTML을 지원합니다. 대표 이미지 뒤에 삽입됩니다', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_leading', fileExtension: 'html' },
+    { key: 'rich_description_additional_trailing', display: '추가 마무리 내용', elementName: 'submission-rich-description-additional-trailing', type: 'long-text', hint: 'HTML을 지원합니다. 끝에 삽입됩니다', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_trailing', fileExtension: 'html' },
+  ]
+  const submissionForm = document.getElementById('addon-submission-form');
+  // Clear all children
+  submissionForm.innerHTML = '';
+  const submitButton = document.getElementById('addon-submit-button');
+  const submissionStatus = document.getElementById('addon-submission-status');
+  const submissionProgress = document.getElementById('addon-submission-progress');
+  async function uploadZip() {
+    CelestiaCloudKitManager.page.hideError();
+    let zip = new JSZip();
+    for (var i = 0; i < submissionElements.length; i++) {
+      const element = submissionElements[i];
+      if (element.ignored) continue;
+      if (document.getElementById(element.elementName).style.display == 'none') continue;
+      var filename = element.key;
+      if (element.overrideFilename)
+        filename = element.overrideFilename;
+
+      switch (element.type) {
+      case 'short-text':
+      case 'long-text':
+      case 'reference':
+      case 'int':
+        var input = document.getElementById(element.elementName);
+        if (input.value.length != 0) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.value);
+        }
+        break;
+      case 'reference-select':
+      case 'text-select':
+        var input = document.getElementById(element.elementName);
+        if (input.selectedIndex >= 0) {
+          const value = input.options[input.selectedIndex].value;
+          if (value.length != 0 && value != 'none') {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, input.value);
+          }
+        }
+        break;
+      case 'file':
+      case 'file-list':
+        var input = document.getElementById(element.elementName);
+        if (input.files.length > 0) {
+          if (element.type == 'file-list') {
+            for (var j = 0; j < input.files.length; j++) {
+              zip.file(`${filename}${j}.${element.fileExtension}`, input.files[j]);
+            }
+          } else {
+            zip.file(`${filename}.${element.fileExtension}`, input.files[0]);
+          }
+        }
+        break;
+      case 'date':
+        var input = document.getElementById(element.elementName);
+        if (input.valueAsDate != null) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.valueAsDate.toISOString().substr(0, 19).replaceAll('-', '/').replaceAll('T', ' '));
+        }
+        break;
+      case 'checkbox':
+        if (element.fileExtension)
+          fullFilename = `${filename}.${element.fileExtension}`;
+        else
+          fullFilename = `${filename}.txt`;
+        var input = document.getElementById(element.elementName);
+        var output = element.fileContentProvider(input.checked);
+        if (output) {
+          zip.file(fullFilename, output);
+        }
+        break;
+      case 'short-text-list':
+      case 'long-text-list':
+        var index = 0;
+        var el = document.getElementById(`${element.elementName}${index}`);
+        var array = [];
+        while (el != null) {
+          array.push(el.value);
+          index += 1;
+          el = document.getElementById(`${element.elementName}${index}`);
+        }
+        if (array.length > 0) {
+          if (element.listFileMode == 'separate') {
+            for (var j = 0; j < array.length; j++) {
+              var fullFilename = filename;
+              if (element.fileExtension)
+                fullFilename = `${filename}${j}.${element.fileExtension}`;
+              else
+                fullFilename = `${filename}${j}.txt`;
+              zip.file(fullFilename, array[j]);
+            }
+          } else {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, array.join('\n'));
+          }
+        }
+        break;
+      default:
+        break;
+      }
+    }
+    submitButton.disabled = true;
+    CelestiaCloudKitManager.page.setStatusKind('info');
+    submissionStatus.style.display = 'block';
+    submissionStatus.innerText = 'ZIP 파일 생성 중...';
+    zip.generateAsync({ type: "blob" }).then(async function(content) {
+      function uuidv4() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+      }
+      const filename = `${uuidv4()}.txt`;
+      try {
+        submissionStatus.innerText = '업로드 URL 요청 중...';
+        const token = GitHubManager.accessToken;
+        if (!token) {
+          throw new Error('GitHub에 로그인하지 않았습니다');
+        }
+        const presignResponse = await fetch(`/api/2/helpers/submit-addon-get-upload-url?accessToken=${encodeURIComponent(token)}`);
+        if (!presignResponse.ok) {
+          throw new Error(`업로드 URL을 가져오지 못했습니다: ${presignResponse.status}`);
+        }
+        const presignData = await presignResponse.json();
+        const uploadUrl = presignData.uploadUrl || (presignData.info && presignData.info.uploadUrl);
+        const downloadUrl = presignData.downloadUrl || (presignData.info && presignData.info.downloadUrl);
+        if (!uploadUrl || !downloadUrl) {
+          throw new Error('업로드 URL 응답이 올바르지 않습니다');
+        }
+
+        submissionStatus.innerText = '애드온 업로드 중...';
+        await new Promise(function(resolve, reject) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('PUT', uploadUrl);
+          xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+          submissionProgress.style.display = 'block';
+          submissionProgress.value = 0;
+          xhr.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+              const percent = Math.round((event.loaded / event.total) * 100);
+              submissionProgress.value = percent;
+              submissionStatus.innerText = `애드온 업로드 중... ${percent}%`;
+            }
+          };
+          xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve();
+            } else {
+              reject(new Error(`애드온을 업로드하지 못했습니다: ${xhr.status}`));
+            }
+          };
+          xhr.onerror = function() {
+            reject(new Error('애드온을 업로드하지 못했습니다: 네트워크 오류'));
+          };
+          xhr.send(content);
+        });
+        submissionProgress.style.display = 'none';
+
+        submissionStatus.innerText = '풀 리퀘스트 생성 중...';
+        GitHubManager.submitByCreatePullRequest(filename, downloadUrl, submissionStatus);
+      } catch (e) {
+        submissionStatus.style.display = 'none';
+        submissionProgress.style.display = 'none';
+        submitButton.disabled = false;
+        CelestiaCloudKitManager.page.showError(e);
+      }
+    });
+  }
+  submitButton.onclick = async function() {
+    await uploadZip();
+  }
+  for (var i = 0; i < submissionElements.length; i++) {
+    const controls = [];
+    const element = submissionElements[i];
+    const fieldGroup = document.createElement('div');
+    fieldGroup.classList.add('field-group');
+    const label = document.createElement('label');
+    label.classList.add('form-label');
+    label.id = `${element.elementName}-label`;
+    label.htmlFor = element.elementName;
+    const labelContent = document.createTextNode(`${element.display}:`);
+    label.appendChild(labelContent);
+    controls.push(label);
+    switch (element.type) {
+    case 'short-text':
+    case 'reference':
+    case 'int':
+      var input = document.createElement('input');
+      input.classList.add('form-control');
+      if (element.type == 'int') {
+        input.type = 'number';
+        input.step = '1';
+      } else {
+        input.type = 'text';
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'reference-select':
+    case 'text-select':
+      var input = document.createElement('select');
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      for (var j = 0; j < element.values.length; j++) {
+        var value = element.values[j];
+        var option = document.createElement('option');
+        option.value = value.id;
+        option.innerText = value.name;
+        input.appendChild(option);
+      }
+      controls.push(input);
+      break;
+    case 'long-text':
+      var input = document.createElement('textarea');
+      input.classList.add('form-control');
+      input.style.resize = 'none';
+      input.id = element.elementName;
+      input.name = element.elementName;
+      input.rows = '4';
+      controls.push(input);
+      break;
+    case 'short-text-list':
+    case 'long-text-list':
+      const container = document.createElement('div');
+      container.classList.add('form-list');
+      container.setAttribute('role', 'group');
+      container.setAttribute('aria-labelledby', label.id);
+      container.id = element.elementName;
+      container.name = element.elementName;
+      const addButton = document.createElement('button');
+      addButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+      addButton.type = 'button';
+      addButton.setAttribute('aria-label', `항목 추가: ${element.display}`);
+      addButton.id = `${element.elementName}-plus`;
+      addButton.name = `${element.elementName}-plus`;
+      addButton.appendChild(CelestiaCloudKitManager.page.createListIcon(true));
+      addButton.onclick = function() {
+        var div = document.createElement('div');
+        div.classList.add('action-row');
+        var minusButton = document.createElement('button');
+        minusButton.type = 'button';
+        minusButton.setAttribute('aria-label', `항목 제거: ${element.display}`);
+        var baseName = `${element.elementName}${container.children.length - 1}`;
+        minusButton.id = `${baseName}-minus`;
+        minusButton.name = `${baseName}-minus`;
+        minusButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+        minusButton.appendChild(CelestiaCloudKitManager.page.createListIcon(false));
+        minusButton.onclick = function() {
+          container.removeChild(div);
+          for (var i = 0; i < container.children.length - 1; i++) {
+            const child = container.children[i];
+            var input = element.type == 'long-text-list' ? child.getElementsByTagName('textarea')[0] : child.getElementsByTagName('input')[0];
+            var minusButton = child.getElementsByTagName('button')[0];
+            var newBaseName = `${element.elementName}${i}`;
+            input.id = newBaseName;
+            input.name = newBaseName;
+            minusButton.id = `${newBaseName}-minus`;
+            minusButton.name = `${newBaseName}-minus`;
+          }
+        };
+        if (element.type == 'long-text-list') {
+          var newInput =  document.createElement('textarea')
+          newInput.classList.add('form-control');
+          newInput.style.resize = 'none';
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.rows = '4';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        } else {
+          var newInput = document.createElement('input');
+          newInput.classList.add('form-control');
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.type = 'text';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        }
+        div.appendChild(minusButton);
+        container.insertBefore(div, addButton);
+      };
+      container.appendChild(addButton);
+      controls.push(container);
+      break;
+    case 'date':
+      var input = document.createElement('input');
+      input.type = 'date';
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'checkbox':
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.classList.add('form-check');
+      fieldGroup.classList.add('field-group-check');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'file':
+    case 'file-list':
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.classList.add('form-file');
+      if (element.type == 'file-list') {
+        input.multiple = true;
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    default:
+      break;
+    }
+    if (element.hint) {
+      const p = document.createElement('p');
+      p.id = `${element.elementName}-hint`;
+      p.classList.add('form-hint');
+      p.appendChild(document.createTextNode(element.hint));
+      const field = controls.find(control => control.id === element.elementName);
+      if (field) field.setAttribute('aria-describedby', p.id);
+      controls.push(p);
+    }
+
+    for (var j = 0; j < controls.length; j++) {
+      fieldGroup.appendChild(controls[j]);
+    }
+    submissionForm.appendChild(fieldGroup);
+
+    if (element.targetCheckBox || element.targetSelect) {
+      const checkboxes = [];
+      const checkboxValues = [];
+      const selects = [];
+      const selectValues = [];
+      if (Array.isArray(element.targetCheckBox)) {
+        for (var j = 0; j < element.targetCheckBox.length; j++) {
+          checkboxes.push(document.getElementById(element.targetCheckBox[j]));
+          checkboxValues.push(element.targetCheckBoxValue[j]);
+        }
+      } else if (element.targetCheckBox) {
+        checkboxes.push(document.getElementById(element.targetCheckBox));
+        checkboxValues.push(element.targetCheckBoxValue);
+      }
+      if (Array.isArray(element.targetSelect)) {
+        for (var j = 0; j < element.targetSelect.length; j++) {
+          selects.push(document.getElementById(element.targetSelect[j]));
+          if (Array.isArray(targetSelectValue[j])) {
+            selectValues.push(element.targetSelectValue[j]);
+          } else {
+            selectValues.push([element.targetSelectValue[j]])
+          }
+        }
+      } else if (element.targetSelect) {
+        selects.push(document.getElementById(element.targetSelect));
+        if (Array.isArray(element.targetSelectValue)) {
+          selectValues.push(element.targetSelectValue);
+        } else {
+          selectValues.push([element.targetSelectValue])
+        }
+      }
+
+      function updateControlVisibility() {
+        let allSatisfy = true;
+        for (var j = 0; j < checkboxes.length; j++) {
+          if (checkboxes[j].checked != checkboxValues[j]) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < selects.length; j++) {
+          if (!selectValues[j].includes(selects[j].value)) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < controls.length; j++) {
+          controls[j].style.display = allSatisfy ? '' : 'none';
+        }
+        fieldGroup.style.display = allSatisfy ? '' : 'none';
+      }
+
+      updateControlVisibility();
+
+      for (var j = 0; j < checkboxes.length; j++) {
+        checkboxes[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+
+      for (var j = 0; j < selects.length; j++) {
+        selects[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+    }
+  }
+};
+</script>
+<script>
+  GitHubManager = {};
+  const githubSignInElement = document.getElementById('github-sign-in-button-button');
+  githubSignInElement.onclick = function() {
+    window.location.href = 'https://github.com/login/oauth/authorize?client_id=1cfca660a17fe68fdfdf&scope=repo';
+  };
+  GitHubManager.importWithRetry = async function(urls, attempts) {
+    const list = Array.isArray(urls) ? urls : [urls];
+    let lastError = null;
+    for (var attempt = 0; attempt < (attempts || 3); attempt++) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          return await import(list[i]);
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      // Back off briefly before retrying (300ms, 600ms, ...).
+      await new Promise(function(resolve) { setTimeout(resolve, 300 * (attempt + 1)); });
+    }
+    throw lastError || new Error('모듈을 불러오지 못했습니다');
+  };
+  GitHubManager.onPageLoaded = async function() {
+    const codeParam = new URL(location.href).searchParams.get("code");
+    if (codeParam) {
+      // remove ?code=... from URL
+      const path = location.pathname + location.search.replace(/\b(code|state)=\w+/g, "").replace(/[?&]+$/, "");
+      history.replaceState({}, "", path);
+      const response = await fetch("/api/2/helpers/submit-addon-get-token", { method: "POST", headers: { "content-type": "application/json", }, body: JSON.stringify({ code: codeParam }) });
+      if (!response.ok) {
+        CelestiaCloudKitManager.page.showErrorText(`네트워크 오류: ${response.status}`);
+        return;
+      }
+      const data = await response.json();
+      const token = data.accessToken;
+      GitHubManager.accessToken = token;
+      try {
+        const { Octokit } = await GitHubManager.importWithRetry(
+          "https://esm.sh/@octokit/core@7.0.6?bundle"
+        );
+        const { createPullRequest } = await GitHubManager.importWithRetry(
+          "https://esm.sh/octokit-plugin-create-pull-request@6.0.1?bundle"
+        );
+        const MyOctokit = Octokit.plugin(createPullRequest);
+        const octokit = new MyOctokit({
+          auth: token,
+        });
+        const submitButton = document.getElementById('addon-submit-button');
+        submitButton.disabled = false;
+        GitHubManager.octokit = octokit;
+      } catch (e) {
+        console.error(e);
+        CelestiaCloudKitManager.page.showErrorText('GitHub 구성 요소를 불러오지 못했습니다. 페이지를 새로고침하고 다시 시도하세요.');
+      }
+    } else {
+      githubSignInElement.parentNode.style.display = '';
+    }
+  };
+
+  GitHubManager.submitByCreatePullRequest = async function(filename, content, submissionStatus) {
+    const prTitle = prompt("풀 리퀘스트 제목을 입력하세요", "애드온 업데이트...");
+    if (prTitle == null || prTitle == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `${filename}의 풀 리퀘스트 생성을 취소했습니다`;
+      return;
+    }
+    const prBody = prompt("풀 리퀘스트 설명을 입력하세요", "...");
+    if (prBody == null || prBody == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `${filename}의 풀 리퀘스트 생성을 취소했습니다`;
+      return;
+    }
+    if (!GitHubManager.octokit) {
+      CelestiaCloudKitManager.page.setStatusKind('error');
+      console.error('GitHub에 로그인하지 않았습니다');
+      submissionStatus.innerText = 'GitHub에 로그인하지 않았습니다';
+      return;
+    }
+    const path = `pending_zip_url/${filename}`;
+    const pr = await GitHubManager.octokit.createPullRequest({
+      owner: "celestiamobile",
+      repo: "celestia-addon-validator",
+      title: prTitle,
+      body: prBody,
+      head: filename,
+      forceFork: false /* optional: force creating fork even when user has write rights */,
+      changes: [
+        {
+          files: {
+            [path]: content,
+          },
+          commit:
+            "wip",
+        },
+      ],
+    })
+    if (pr && pr.data && pr.data.number) {
+      CelestiaCloudKitManager.page.setStatusKind('success');
+      submissionStatus.innerHTML = `풀 리퀘스트가 생성되었습니다. <a href="https://github.com/celestiamobile/celestia-addon-validator/pull/${pr.data.number}">여기에서 확인</a>`;
+    } else {
+      CelestiaCloudKitManager.page.showErrorText('풀 리퀘스트 생성 중 오류가 발생했습니다')
+    }
+  };
+</script>
+<script>
+  window.addEventListener("DOMContentLoaded", async function() {
+    CelestiaCloudKitManager.loadCategories();
+    await GitHubManager.onPageLoaded();
+  });
+</script>

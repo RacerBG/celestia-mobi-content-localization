@@ -1,0 +1,629 @@
+<script type="text/javascript" src="{0}"></script>
+<p>Compila tutti i campi contrassegnati come obbligatori. Compila i campi facoltativi solo quando è assolutamente necessario. Il tuo invio verrà rifiutato se compili un campo facoltativo senza una reale necessità.</p>
+<div class="stack"><div id="github-sign-in-button" class="action-row" style="display:none;"><button class="button-filled" id="github-sign-in-button-button">Accedi con GitHub</button></div>
+<div id="addon-submission-area" class="stack"><div id="addon-submission-form" class="form-fields stack"></div><div class="action-row form-actions"><button id="addon-submit-button" disabled class="button-filled">Invia</button></div><p id="addon-submission-status" class="feedback feedback-info" role="status" aria-live="polite" style="display:none;"></p><progress id="addon-submission-progress" class="form-progress" value="0" max="100" aria-label="Avanzamento del caricamento" style="display:none;"></progress></div>
+<p id="error-information-text" class="feedback feedback-error" role="alert" style="display:none;"></p></div>
+<script>"use strict";</script>
+<script>CelestiaCloudKitManager = {};</script>
+<script>
+CelestiaCloudKitManager.page = (function() {
+  var self = {};
+  self.authorCount = 0;
+  self.setStatusKind = function(kind) {
+    document.getElementById('addon-submission-status').className = `feedback feedback-${kind}`;
+  };
+  self.createListIcon = function(add) {
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute('focusable', 'false');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', add ? 'M12 5v14M5 12h14' : 'M5 12h14');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-linecap', 'round');
+    icon.appendChild(path);
+    return icon;
+  };
+  self.showErrorText = function(text) {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'block';
+    errorElement.innerText = text;
+  };
+  self.showError = function(error) {
+    // First log to the console in case anyone needs a stack trace.
+    console.error(error);
+    self.showErrorText(error.message || 'Si è verificato un errore.');
+  };
+  self.hideError = function() {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'none';
+  }
+  return self;
+})();
+
+CelestiaCloudKitManager.loadCategories = function() {
+  fetch('/api/resource/categories?lang=it').then(function(response) {
+    if (!response.ok) {
+      CelestiaCloudKitManager.page.showErrorText('Impossibile ottenere le informazioni sulle categorie');
+      return null;
+    }
+    return response.json();
+  }).then(function (data) {
+    if (!data) return;
+    if (data.status != 0 || !data.info || !data.info.detail) {
+      if (data.info && data.info.reason) {
+        CelestiaCloudKitManager.page.showErrorText(data.info.reason)
+      } else {
+        CelestiaCloudKitManager.page.showErrorText('Errore sconosciuto nel recupero delle informazioni sulle categorie')
+      }
+      return;
+    }
+    const categories = JSON.parse(data.info.detail);
+    CelestiaCloudKitManager.onDataFetched([{ name: 'Nessuno', id: '' }].concat(categories));
+  }).catch(function(error) {
+    console.error(error);
+    CelestiaCloudKitManager.page.showErrorText('Impossibile ottenere le informazioni sulle categorie');
+  });
+}
+
+CelestiaCloudKitManager.onDataFetched = function(categories) {
+  const submissionElements = [
+    { key: 'remove', display: 'Rimuovere questo componente aggiuntivo?', elementName: 'submission-remove', type: 'checkbox', hint: 'Contrassegna questo componente aggiuntivo per la rimozione', overrideFilename: 'category', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; } },
+    { key: 'title', display: 'Titolo', elementName: 'submission-title', type: 'short-text', hint: 'Obbligatorio per i nuovi componenti aggiuntivi', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'category', display: 'Categoria', elementName: 'submission-category', type: 'reference-select', values: categories, hint: 'Obbligatorio per i nuovi componenti aggiuntivi. ID della categoria', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'type', display: 'Tipo', elementName: 'submission-type', type: 'text-select', values: [{ name: 'Nessuno', id: 'none' }, { name: 'Componente aggiuntivo', id: 'addon' }, { name: 'Script', id: 'script' }], hint: 'Scegli Script per i componenti aggiuntivi di tipo script. Deve essere «Nessuno» per aggiornare un componente aggiuntivo e NON deve essere «Nessuno» per crearne uno nuovo', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'id_requirement', display: 'ID del componente aggiuntivo', elementName: 'submission-id-requirement', type: 'short-text', hint: 'Obbligatorio per aggiornare o rimuovere un componente aggiuntivo esistente. Per un aggiornamento, inserisci qui l’ID completo e compila SOLO gli altri campi modificati' },
+    { key: 'authors', display: 'Autori', elementName: 'submission-authors', type: 'short-text-list', hint: 'Obbligatorio per i nuovi componenti aggiuntivi. Autori del componente aggiuntivo', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_publish_time', display: 'Data di pubblicazione originale', elementName: 'submission-original-publish-time', type: 'date', hint: 'Facoltativo. Data della prima pubblicazione del componente aggiuntivo nella fonte originale. Lascia vuoto se sconosciuta o invariata', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_url', display: 'URL originale', elementName: 'submission-original-url', type: 'short-text', hint: 'Facoltativo. Collegamento HTTP o HTTPS alla fonte originale del componente aggiuntivo. Lascia vuoto se sconosciuto o invariato', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'remove_dependencies', display: 'Rimuovi i requisiti di dipendenza', elementName: 'submission-remove-dependencies', type: 'checkbox', hint: 'Seleziona questa casella per rimuovere i requisiti di dipendenza', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }, targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'dependencies', display: 'Dipendenze', elementName: 'submission-dependencies', type: 'short-text-list', hint: 'ID dei componenti aggiuntivi da cui dipende questo componente aggiuntivo', targetCheckBox: ['submission-remove', 'submission-remove-dependencies'], targetCheckBoxValue: [false, false] },
+    { key: 'rank', display: 'Priorità di ordinamento', elementName: 'submission-rank', type: 'int', hint: 'Lascia vuoto per i componenti aggiuntivi normali; avranno priorità 0. Specifica una priorità solo quando è assolutamente necessario un ordine di visualizzazione personalizzato. I componenti aggiuntivi con priorità maggiore vengono mostrati per primi in una categoria', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'description', display: 'Descrizione', elementName: 'submission-description', type: 'long-text', hint: 'Obbligatorio per i nuovi componenti aggiuntivi. Descrizione del componente aggiuntivo in testo semplice', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'demo_object_name', display: 'Nome dell’oggetto di dimostrazione', elementName: 'submission-demo-object-name', type: 'short-text', hint: 'Percorso dell’oggetto per «Vai a». Se indicato, deve corrispondere a un oggetto o a un antenato degli oggetti definiti nei file ssc/stc/dsc di questo componente aggiuntivo e avere il formato di un percorso (ad es. Sol/Earth/Moon)', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['addon', 'none'] },
+    { key: 'main_script_name', display: 'Nome dello script principale', elementName: 'submission-main-script-name', type: 'short-text', hint: 'Nome del file dello script principale', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['script', 'none'] },
+    { key: 'cover_image', display: 'Immagine di copertina', elementName: 'submission-cover-image', type: 'file', hint: 'Obbligatorio per i nuovi componenti aggiuntivi', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'jpg'},
+    { key: 'addon', display: 'Componente aggiuntivo', elementName: 'submission-addon', type: 'file', hint: 'Obbligatorio per i nuovi componenti aggiuntivi', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'zip' },
+    { key: 'remove_rich_description', display: 'Rimuovere la descrizione formattata esistente?', elementName: 'submission-remove-rich-description', type: 'checkbox', hint: 'Seleziona questa casella per rimuovere la descrizione formattata. Valido solo quando si aggiorna un componente aggiuntivo', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }},
+    { key: 'rich_description', display: 'Includere una descrizione formattata?', elementName: 'submission-rich-description', type: 'checkbox', ignored: true, targetCheckBox: ['submission-remove', 'submission-remove-rich-description'], targetCheckBoxValue: [false, false] },
+    { key: 'rich_description_base', display: 'Testo della descrizione formattata', elementName: 'submission-rich-description-base', type: 'long-text', hint: 'HTML supportato. Se non viene fornito, tutti i campi seguenti saranno ignorati. Usa celaddon://item?item=ADDON_ID per i collegamenti ai componenti aggiuntivi e celguide://guide?guide=ARTICLE_ID per i collegamenti agli articoli', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/base' },
+    { key: 'rich_description_notes', display: 'Note', elementName: 'submission-rich-description-notes', type: 'long-text-list', hint: 'HTML supportato', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/notes' },
+    { key: 'rich_description_note_type', display: 'Tipo di nota', elementName: 'submission-rich-description-note-type', type: 'text-select', values: [{ name: 'Nota', id: 'note' }, { name: 'Importante', id: 'important' }, { name: 'Avviso', id: 'warning' }], hint: 'Tipo di note, usato solo quando sono presenti note. Le note importanti avranno uno sfondo giallo e gli avvisi uno sfondo rosso', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/note_type' },
+    { key: 'rich_description_cover_image', display: 'Immagine di copertina', elementName: 'submission-rich-description-cover-image', type: 'file', hint: 'Obbligatorio quando si fornisce una descrizione formattata', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image', fileExtension: 'jpg' },
+    { key: 'rich_description_cover_image_caption', display: 'Didascalia dell’immagine di copertina', elementName: 'submission-rich-description-cover-image-caption', type: 'long-text', hint: 'HTML supportato', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image' },
+    { key: 'rich_description_detail_images', display: 'Immagini di dettaglio', elementName: 'submission-rich-description-detail-images', type: 'file-list', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', fileExtension: 'jpg' },
+    { key: 'rich_description_detail_image_captions', display: 'Didascalie delle immagini di dettaglio', elementName: 'submission-rich-description-detail-image-captions', type: 'long-text-list', hint: 'HTML supportato. Didascalie delle immagini di dettaglio qui sopra; devono rispettare l’ordine delle immagini. Se un’immagine non richiede una didascalia, lascia il campo vuoto', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', listFileMode: 'separate' },
+    { key: 'rich_description_youtube_ids', display: 'ID YouTube', elementName: 'submission-rich-description-youtube-ids', type: 'short-text-list', hint: 'ID dei video YouTube', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/youtube_ids' },
+    { key: 'rich_description_additional_leading', display: 'Contenuto iniziale aggiuntivo', elementName: 'submission-rich-description-additional-leading', type: 'long-text', hint: 'HTML supportato. Verrà inserito dopo l’immagine di copertina', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_leading', fileExtension: 'html' },
+    { key: 'rich_description_additional_trailing', display: 'Contenuto finale aggiuntivo', elementName: 'submission-rich-description-additional-trailing', type: 'long-text', hint: 'HTML supportato. Verrà inserito alla fine', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_trailing', fileExtension: 'html' },
+  ]
+  const submissionForm = document.getElementById('addon-submission-form');
+  // Clear all children
+  submissionForm.innerHTML = '';
+  const submitButton = document.getElementById('addon-submit-button');
+  const submissionStatus = document.getElementById('addon-submission-status');
+  const submissionProgress = document.getElementById('addon-submission-progress');
+  async function uploadZip() {
+    CelestiaCloudKitManager.page.hideError();
+    let zip = new JSZip();
+    for (var i = 0; i < submissionElements.length; i++) {
+      const element = submissionElements[i];
+      if (element.ignored) continue;
+      if (document.getElementById(element.elementName).style.display == 'none') continue;
+      var filename = element.key;
+      if (element.overrideFilename)
+        filename = element.overrideFilename;
+
+      switch (element.type) {
+      case 'short-text':
+      case 'long-text':
+      case 'reference':
+      case 'int':
+        var input = document.getElementById(element.elementName);
+        if (input.value.length != 0) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.value);
+        }
+        break;
+      case 'reference-select':
+      case 'text-select':
+        var input = document.getElementById(element.elementName);
+        if (input.selectedIndex >= 0) {
+          const value = input.options[input.selectedIndex].value;
+          if (value.length != 0 && value != 'none') {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, input.value);
+          }
+        }
+        break;
+      case 'file':
+      case 'file-list':
+        var input = document.getElementById(element.elementName);
+        if (input.files.length > 0) {
+          if (element.type == 'file-list') {
+            for (var j = 0; j < input.files.length; j++) {
+              zip.file(`${filename}${j}.${element.fileExtension}`, input.files[j]);
+            }
+          } else {
+            zip.file(`${filename}.${element.fileExtension}`, input.files[0]);
+          }
+        }
+        break;
+      case 'date':
+        var input = document.getElementById(element.elementName);
+        if (input.valueAsDate != null) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.valueAsDate.toISOString().substr(0, 19).replaceAll('-', '/').replaceAll('T', ' '));
+        }
+        break;
+      case 'checkbox':
+        if (element.fileExtension)
+          fullFilename = `${filename}.${element.fileExtension}`;
+        else
+          fullFilename = `${filename}.txt`;
+        var input = document.getElementById(element.elementName);
+        var output = element.fileContentProvider(input.checked);
+        if (output) {
+          zip.file(fullFilename, output);
+        }
+        break;
+      case 'short-text-list':
+      case 'long-text-list':
+        var index = 0;
+        var el = document.getElementById(`${element.elementName}${index}`);
+        var array = [];
+        while (el != null) {
+          array.push(el.value);
+          index += 1;
+          el = document.getElementById(`${element.elementName}${index}`);
+        }
+        if (array.length > 0) {
+          if (element.listFileMode == 'separate') {
+            for (var j = 0; j < array.length; j++) {
+              var fullFilename = filename;
+              if (element.fileExtension)
+                fullFilename = `${filename}${j}.${element.fileExtension}`;
+              else
+                fullFilename = `${filename}${j}.txt`;
+              zip.file(fullFilename, array[j]);
+            }
+          } else {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, array.join('\n'));
+          }
+        }
+        break;
+      default:
+        break;
+      }
+    }
+    submitButton.disabled = true;
+    CelestiaCloudKitManager.page.setStatusKind('info');
+    submissionStatus.style.display = 'block';
+    submissionStatus.innerText = 'Generazione del file ZIP...';
+    zip.generateAsync({ type: "blob" }).then(async function(content) {
+      function uuidv4() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+      }
+      const filename = `${uuidv4()}.txt`;
+      try {
+        submissionStatus.innerText = 'Richiesta dell’URL di caricamento...';
+        const token = GitHubManager.accessToken;
+        if (!token) {
+          throw new Error('Non hai effettuato l’accesso a GitHub');
+        }
+        const presignResponse = await fetch(`/api/2/helpers/submit-addon-get-upload-url?accessToken=${encodeURIComponent(token)}`);
+        if (!presignResponse.ok) {
+          throw new Error(`Impossibile ottenere l’URL di caricamento: ${presignResponse.status}`);
+        }
+        const presignData = await presignResponse.json();
+        const uploadUrl = presignData.uploadUrl || (presignData.info && presignData.info.uploadUrl);
+        const downloadUrl = presignData.downloadUrl || (presignData.info && presignData.info.downloadUrl);
+        if (!uploadUrl || !downloadUrl) {
+          throw new Error('Risposta dell’URL di caricamento non valida');
+        }
+
+        submissionStatus.innerText = 'Caricamento del componente aggiuntivo...';
+        await new Promise(function(resolve, reject) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('PUT', uploadUrl);
+          xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+          submissionProgress.style.display = 'block';
+          submissionProgress.value = 0;
+          xhr.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+              const percent = Math.round((event.loaded / event.total) * 100);
+              submissionProgress.value = percent;
+              submissionStatus.innerText = `Caricamento del componente aggiuntivo... ${percent}%`;
+            }
+          };
+          xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve();
+            } else {
+              reject(new Error(`Impossibile caricare il componente aggiuntivo: ${xhr.status}`));
+            }
+          };
+          xhr.onerror = function() {
+            reject(new Error('Impossibile caricare il componente aggiuntivo: errore di rete'));
+          };
+          xhr.send(content);
+        });
+        submissionProgress.style.display = 'none';
+
+        submissionStatus.innerText = 'Creazione della pull request...';
+        GitHubManager.submitByCreatePullRequest(filename, downloadUrl, submissionStatus);
+      } catch (e) {
+        submissionStatus.style.display = 'none';
+        submissionProgress.style.display = 'none';
+        submitButton.disabled = false;
+        CelestiaCloudKitManager.page.showError(e);
+      }
+    });
+  }
+  submitButton.onclick = async function() {
+    await uploadZip();
+  }
+  for (var i = 0; i < submissionElements.length; i++) {
+    const controls = [];
+    const element = submissionElements[i];
+    const fieldGroup = document.createElement('div');
+    fieldGroup.classList.add('field-group');
+    const label = document.createElement('label');
+    label.classList.add('form-label');
+    label.id = `${element.elementName}-label`;
+    label.htmlFor = element.elementName;
+    const labelContent = document.createTextNode(`${element.display}:`);
+    label.appendChild(labelContent);
+    controls.push(label);
+    switch (element.type) {
+    case 'short-text':
+    case 'reference':
+    case 'int':
+      var input = document.createElement('input');
+      input.classList.add('form-control');
+      if (element.type == 'int') {
+        input.type = 'number';
+        input.step = '1';
+      } else {
+        input.type = 'text';
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'reference-select':
+    case 'text-select':
+      var input = document.createElement('select');
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      for (var j = 0; j < element.values.length; j++) {
+        var value = element.values[j];
+        var option = document.createElement('option');
+        option.value = value.id;
+        option.innerText = value.name;
+        input.appendChild(option);
+      }
+      controls.push(input);
+      break;
+    case 'long-text':
+      var input = document.createElement('textarea');
+      input.classList.add('form-control');
+      input.style.resize = 'none';
+      input.id = element.elementName;
+      input.name = element.elementName;
+      input.rows = '4';
+      controls.push(input);
+      break;
+    case 'short-text-list':
+    case 'long-text-list':
+      const container = document.createElement('div');
+      container.classList.add('form-list');
+      container.setAttribute('role', 'group');
+      container.setAttribute('aria-labelledby', label.id);
+      container.id = element.elementName;
+      container.name = element.elementName;
+      const addButton = document.createElement('button');
+      addButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+      addButton.type = 'button';
+      addButton.setAttribute('aria-label', `Aggiungi un elemento: ${element.display}`);
+      addButton.id = `${element.elementName}-plus`;
+      addButton.name = `${element.elementName}-plus`;
+      addButton.appendChild(CelestiaCloudKitManager.page.createListIcon(true));
+      addButton.onclick = function() {
+        var div = document.createElement('div');
+        div.classList.add('action-row');
+        var minusButton = document.createElement('button');
+        minusButton.type = 'button';
+        minusButton.setAttribute('aria-label', `Rimuovi un elemento: ${element.display}`);
+        var baseName = `${element.elementName}${container.children.length - 1}`;
+        minusButton.id = `${baseName}-minus`;
+        minusButton.name = `${baseName}-minus`;
+        minusButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+        minusButton.appendChild(CelestiaCloudKitManager.page.createListIcon(false));
+        minusButton.onclick = function() {
+          container.removeChild(div);
+          for (var i = 0; i < container.children.length - 1; i++) {
+            const child = container.children[i];
+            var input = element.type == 'long-text-list' ? child.getElementsByTagName('textarea')[0] : child.getElementsByTagName('input')[0];
+            var minusButton = child.getElementsByTagName('button')[0];
+            var newBaseName = `${element.elementName}${i}`;
+            input.id = newBaseName;
+            input.name = newBaseName;
+            minusButton.id = `${newBaseName}-minus`;
+            minusButton.name = `${newBaseName}-minus`;
+          }
+        };
+        if (element.type == 'long-text-list') {
+          var newInput =  document.createElement('textarea')
+          newInput.classList.add('form-control');
+          newInput.style.resize = 'none';
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.rows = '4';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        } else {
+          var newInput = document.createElement('input');
+          newInput.classList.add('form-control');
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.type = 'text';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        }
+        div.appendChild(minusButton);
+        container.insertBefore(div, addButton);
+      };
+      container.appendChild(addButton);
+      controls.push(container);
+      break;
+    case 'date':
+      var input = document.createElement('input');
+      input.type = 'date';
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'checkbox':
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.classList.add('form-check');
+      fieldGroup.classList.add('field-group-check');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'file':
+    case 'file-list':
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.classList.add('form-file');
+      if (element.type == 'file-list') {
+        input.multiple = true;
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    default:
+      break;
+    }
+    if (element.hint) {
+      const p = document.createElement('p');
+      p.id = `${element.elementName}-hint`;
+      p.classList.add('form-hint');
+      p.appendChild(document.createTextNode(element.hint));
+      const field = controls.find(control => control.id === element.elementName);
+      if (field) field.setAttribute('aria-describedby', p.id);
+      controls.push(p);
+    }
+
+    for (var j = 0; j < controls.length; j++) {
+      fieldGroup.appendChild(controls[j]);
+    }
+    submissionForm.appendChild(fieldGroup);
+
+    if (element.targetCheckBox || element.targetSelect) {
+      const checkboxes = [];
+      const checkboxValues = [];
+      const selects = [];
+      const selectValues = [];
+      if (Array.isArray(element.targetCheckBox)) {
+        for (var j = 0; j < element.targetCheckBox.length; j++) {
+          checkboxes.push(document.getElementById(element.targetCheckBox[j]));
+          checkboxValues.push(element.targetCheckBoxValue[j]);
+        }
+      } else if (element.targetCheckBox) {
+        checkboxes.push(document.getElementById(element.targetCheckBox));
+        checkboxValues.push(element.targetCheckBoxValue);
+      }
+      if (Array.isArray(element.targetSelect)) {
+        for (var j = 0; j < element.targetSelect.length; j++) {
+          selects.push(document.getElementById(element.targetSelect[j]));
+          if (Array.isArray(targetSelectValue[j])) {
+            selectValues.push(element.targetSelectValue[j]);
+          } else {
+            selectValues.push([element.targetSelectValue[j]])
+          }
+        }
+      } else if (element.targetSelect) {
+        selects.push(document.getElementById(element.targetSelect));
+        if (Array.isArray(element.targetSelectValue)) {
+          selectValues.push(element.targetSelectValue);
+        } else {
+          selectValues.push([element.targetSelectValue])
+        }
+      }
+
+      function updateControlVisibility() {
+        let allSatisfy = true;
+        for (var j = 0; j < checkboxes.length; j++) {
+          if (checkboxes[j].checked != checkboxValues[j]) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < selects.length; j++) {
+          if (!selectValues[j].includes(selects[j].value)) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < controls.length; j++) {
+          controls[j].style.display = allSatisfy ? '' : 'none';
+        }
+        fieldGroup.style.display = allSatisfy ? '' : 'none';
+      }
+
+      updateControlVisibility();
+
+      for (var j = 0; j < checkboxes.length; j++) {
+        checkboxes[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+
+      for (var j = 0; j < selects.length; j++) {
+        selects[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+    }
+  }
+};
+</script>
+<script>
+  GitHubManager = {};
+  const githubSignInElement = document.getElementById('github-sign-in-button-button');
+  githubSignInElement.onclick = function() {
+    window.location.href = 'https://github.com/login/oauth/authorize?client_id=1cfca660a17fe68fdfdf&scope=repo';
+  };
+  GitHubManager.importWithRetry = async function(urls, attempts) {
+    const list = Array.isArray(urls) ? urls : [urls];
+    let lastError = null;
+    for (var attempt = 0; attempt < (attempts || 3); attempt++) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          return await import(list[i]);
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      // Back off briefly before retrying (300ms, 600ms, ...).
+      await new Promise(function(resolve) { setTimeout(resolve, 300 * (attempt + 1)); });
+    }
+    throw lastError || new Error('Impossibile importare il modulo');
+  };
+  GitHubManager.onPageLoaded = async function() {
+    const codeParam = new URL(location.href).searchParams.get("code");
+    if (codeParam) {
+      // remove ?code=... from URL
+      const path = location.pathname + location.search.replace(/\b(code|state)=\w+/g, "").replace(/[?&]+$/, "");
+      history.replaceState({}, "", path);
+      const response = await fetch("/api/2/helpers/submit-addon-get-token", { method: "POST", headers: { "content-type": "application/json", }, body: JSON.stringify({ code: codeParam }) });
+      if (!response.ok) {
+        CelestiaCloudKitManager.page.showErrorText(`Errore di rete: ${response.status}`);
+        return;
+      }
+      const data = await response.json();
+      const token = data.accessToken;
+      GitHubManager.accessToken = token;
+      try {
+        const { Octokit } = await GitHubManager.importWithRetry(
+          "https://esm.sh/@octokit/core@7.0.6?bundle"
+        );
+        const { createPullRequest } = await GitHubManager.importWithRetry(
+          "https://esm.sh/octokit-plugin-create-pull-request@6.0.1?bundle"
+        );
+        const MyOctokit = Octokit.plugin(createPullRequest);
+        const octokit = new MyOctokit({
+          auth: token,
+        });
+        const submitButton = document.getElementById('addon-submit-button');
+        submitButton.disabled = false;
+        GitHubManager.octokit = octokit;
+      } catch (e) {
+        console.error(e);
+        CelestiaCloudKitManager.page.showErrorText('Impossibile caricare i componenti di GitHub. Ricarica la pagina e riprova.');
+      }
+    } else {
+      githubSignInElement.parentNode.style.display = '';
+    }
+  };
+
+  GitHubManager.submitByCreatePullRequest = async function(filename, content, submissionStatus) {
+    const prTitle = prompt("Inserisci un titolo per la tua pull request", "Aggiorna componente aggiuntivo...");
+    if (prTitle == null || prTitle == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `Creazione della pull request per ${filename} annullata`;
+      return;
+    }
+    const prBody = prompt("Inserisci una descrizione per la tua pull request", "...");
+    if (prBody == null || prBody == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `Creazione della pull request per ${filename} annullata`;
+      return;
+    }
+    if (!GitHubManager.octokit) {
+      CelestiaCloudKitManager.page.setStatusKind('error');
+      console.error('Non hai effettuato l’accesso a GitHub');
+      submissionStatus.innerText = 'Non hai effettuato l’accesso a GitHub';
+      return;
+    }
+    const path = `pending_zip_url/${filename}`;
+    const pr = await GitHubManager.octokit.createPullRequest({
+      owner: "celestiamobile",
+      repo: "celestia-addon-validator",
+      title: prTitle,
+      body: prBody,
+      head: filename,
+      forceFork: false /* optional: force creating fork even when user has write rights */,
+      changes: [
+        {
+          files: {
+            [path]: content,
+          },
+          commit:
+            "wip",
+        },
+      ],
+    })
+    if (pr && pr.data && pr.data.number) {
+      CelestiaCloudKitManager.page.setStatusKind('success');
+      submissionStatus.innerHTML = `Pull request creata: <a href="https://github.com/celestiamobile/celestia-addon-validator/pull/${pr.data.number}">visualizza qui</a>`;
+    } else {
+      CelestiaCloudKitManager.page.showErrorText('Errore durante la creazione della pull request')
+    }
+  };
+</script>
+<script>
+  window.addEventListener("DOMContentLoaded", async function() {
+    CelestiaCloudKitManager.loadCategories();
+    await GitHubManager.onPageLoaded();
+  });
+</script>

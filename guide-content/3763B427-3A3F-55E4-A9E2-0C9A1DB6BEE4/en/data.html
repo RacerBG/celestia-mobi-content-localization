@@ -44,14 +44,15 @@ CelestiaCloudKitManager.page = (function() {
 })();
 
 CelestiaCloudKitManager.loadCategories = function() {
-  fetch('/api/resource/categories').then(function(response) {
+  fetch('/api/resource/categories?lang=en').then(function(response) {
     if (!response.ok) {
       CelestiaCloudKitManager.page.showErrorText('Failed to get category info');
       return null;
     }
     return response.json();
   }).then(function (data) {
-    if (!data || data.status != 0 || !data.info || !data.info.detail) {
+    if (!data) return;
+    if (data.status != 0 || !data.info || !data.info.detail) {
       if (data.info && data.info.reason) {
         CelestiaCloudKitManager.page.showErrorText(data.info.reason)
       } else {
@@ -61,6 +62,9 @@ CelestiaCloudKitManager.loadCategories = function() {
     }
     const categories = JSON.parse(data.info.detail);
     CelestiaCloudKitManager.onDataFetched([{ name: 'None', id: '' }].concat(categories));
+  }).catch(function(error) {
+    console.error(error);
+    CelestiaCloudKitManager.page.showErrorText('Failed to get category info');
   });
 }
 

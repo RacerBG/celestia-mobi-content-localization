@@ -1,0 +1,629 @@
+<script type="text/javascript" src="{0}"></script>
+<p>Veuillez remplir tous les champs indiqués comme obligatoires. Ne remplissez les champs facultatifs que si cela est absolument nécessaire. Votre soumission sera rejetée si vous remplissez un champ facultatif sans nécessité réelle.</p>
+<div class="stack"><div id="github-sign-in-button" class="action-row" style="display:none;"><button class="button-filled" id="github-sign-in-button-button">Se connecter avec GitHub</button></div>
+<div id="addon-submission-area" class="stack"><div id="addon-submission-form" class="form-fields stack"></div><div class="action-row form-actions"><button id="addon-submit-button" disabled class="button-filled">Soumettre</button></div><p id="addon-submission-status" class="feedback feedback-info" role="status" aria-live="polite" style="display:none;"></p><progress id="addon-submission-progress" class="form-progress" value="0" max="100" aria-label="Progression de l’envoi" style="display:none;"></progress></div>
+<p id="error-information-text" class="feedback feedback-error" role="alert" style="display:none;"></p></div>
+<script>"use strict";</script>
+<script>CelestiaCloudKitManager = {};</script>
+<script>
+CelestiaCloudKitManager.page = (function() {
+  var self = {};
+  self.authorCount = 0;
+  self.setStatusKind = function(kind) {
+    document.getElementById('addon-submission-status').className = `feedback feedback-${kind}`;
+  };
+  self.createListIcon = function(add) {
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.setAttribute('focusable', 'false');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', add ? 'M12 5v14M5 12h14' : 'M5 12h14');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-linecap', 'round');
+    icon.appendChild(path);
+    return icon;
+  };
+  self.showErrorText = function(text) {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'block';
+    errorElement.innerText = text;
+  };
+  self.showError = function(error) {
+    // First log to the console in case anyone needs a stack trace.
+    console.error(error);
+    self.showErrorText(error.message || 'Une erreur est survenue.');
+  };
+  self.hideError = function() {
+    const errorElement = document.getElementById('error-information-text');
+    errorElement.style.display = 'none';
+  }
+  return self;
+})();
+
+CelestiaCloudKitManager.loadCategories = function() {
+  fetch('/api/resource/categories?lang=fr').then(function(response) {
+    if (!response.ok) {
+      CelestiaCloudKitManager.page.showErrorText('Impossible de récupérer les informations sur les catégories');
+      return null;
+    }
+    return response.json();
+  }).then(function (data) {
+    if (!data) return;
+    if (data.status != 0 || !data.info || !data.info.detail) {
+      if (data.info && data.info.reason) {
+        CelestiaCloudKitManager.page.showErrorText(data.info.reason)
+      } else {
+        CelestiaCloudKitManager.page.showErrorText('Erreur inconnue lors de la récupération des informations sur les catégories')
+      }
+      return;
+    }
+    const categories = JSON.parse(data.info.detail);
+    CelestiaCloudKitManager.onDataFetched([{ name: 'Aucun', id: '' }].concat(categories));
+  }).catch(function(error) {
+    console.error(error);
+    CelestiaCloudKitManager.page.showErrorText('Impossible de récupérer les informations sur les catégories');
+  });
+}
+
+CelestiaCloudKitManager.onDataFetched = function(categories) {
+  const submissionElements = [
+    { key: 'remove', display: 'Supprimer cette extension ?', elementName: 'submission-remove', type: 'checkbox', hint: 'Marquer cette extension pour suppression', overrideFilename: 'category', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; } },
+    { key: 'title', display: 'Titre', elementName: 'submission-title', type: 'short-text', hint: 'Obligatoire pour les nouvelles extensions', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'category', display: 'Catégorie', elementName: 'submission-category', type: 'reference-select', values: categories, hint: 'Obligatoire pour les nouvelles extensions. Identifiant de la catégorie', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'type', display: 'Type', elementName: 'submission-type', type: 'text-select', values: [{ name: 'Aucun', id: 'none' }, { name: 'Extension', id: 'addon' }, { name: 'Script', id: 'script' }], hint: 'Choisissez Script pour les extensions de type script. La valeur doit être « Aucun » pour mettre à jour une extension et ne doit PAS être « Aucun » pour en créer une', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'id_requirement', display: 'Identifiant de l’extension', elementName: 'submission-id-requirement', type: 'short-text', hint: 'Obligatoire pour mettre à jour ou supprimer une extension existante. Pour une mise à jour, saisissez ici son identifiant complet et remplissez UNIQUEMENT les autres champs qui ont changé' },
+    { key: 'authors', display: 'Auteurs', elementName: 'submission-authors', type: 'short-text-list', hint: 'Obligatoire pour les nouvelles extensions. Auteurs de l’extension', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_publish_time', display: 'Date de publication initiale', elementName: 'submission-original-publish-time', type: 'date', hint: 'Facultatif. Date de première publication de l’extension à sa source d’origine. Laissez ce champ vide si elle est inconnue ou inchangée', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'original_url', display: 'URL d’origine', elementName: 'submission-original-url', type: 'short-text', hint: 'Facultatif. Lien HTTP ou HTTPS vers la source d’origine de l’extension. Laissez ce champ vide s’il est inconnu ou inchangé', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'remove_dependencies', display: 'Supprimer les exigences de dépendances', elementName: 'submission-remove-dependencies', type: 'checkbox', hint: 'Cochez cette case pour supprimer les exigences de dépendances', fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }, targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'dependencies', display: 'Dépendances', elementName: 'submission-dependencies', type: 'short-text-list', hint: 'Identifiants des extensions dont dépend cette extension', targetCheckBox: ['submission-remove', 'submission-remove-dependencies'], targetCheckBoxValue: [false, false] },
+    { key: 'rank', display: 'Priorité de classement', elementName: 'submission-rank', type: 'int', hint: 'Laissez ce champ vide pour les extensions ordinaires ; elles auront une priorité de 0. N’indiquez une priorité que si un ordre d’affichage personnalisé est absolument nécessaire. Les extensions de priorité supérieure apparaissent en premier dans une catégorie', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'description', display: 'Description', elementName: 'submission-description', type: 'long-text', hint: 'Obligatoire pour les nouvelles extensions. Description de l’extension en texte brut', targetCheckBox: 'submission-remove', targetCheckBoxValue: false },
+    { key: 'demo_object_name', display: 'Nom de l’objet de démonstration', elementName: 'submission-demo-object-name', type: 'short-text', hint: 'Chemin de l’objet pour « Aller à ». S’il est fourni, il doit correspondre à un objet ou à un ancêtre des objets définis dans les fichiers ssc/stc/dsc de cette extension et être au format d’un chemin (par exemple Sol/Earth/Moon)', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['addon', 'none'] },
+    { key: 'main_script_name', display: 'Nom du script principal', elementName: 'submission-main-script-name', type: 'short-text', hint: 'Nom du fichier du script principal', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, targetSelect: 'submission-type', targetSelectValue: ['script', 'none'] },
+    { key: 'cover_image', display: 'Image de couverture', elementName: 'submission-cover-image', type: 'file', hint: 'Obligatoire pour les nouvelles extensions', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'jpg'},
+    { key: 'addon', display: 'Extension', elementName: 'submission-addon', type: 'file', hint: 'Obligatoire pour les nouvelles extensions', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileExtension: 'zip' },
+    { key: 'remove_rich_description', display: 'Supprimer la description enrichie existante ?', elementName: 'submission-remove-rich-description', type: 'checkbox', hint: 'Cochez cette case pour supprimer la description enrichie. Valable uniquement lors de la mise à jour d’une extension', targetCheckBox: 'submission-remove', targetCheckBoxValue: false, fileContentProvider: function(checked) { if (checked) return 'remove'; else return null; }},
+    { key: 'rich_description', display: 'Inclure une description enrichie ?', elementName: 'submission-rich-description', type: 'checkbox', ignored: true, targetCheckBox: ['submission-remove', 'submission-remove-rich-description'], targetCheckBoxValue: [false, false] },
+    { key: 'rich_description_base', display: 'Texte de la description enrichie', elementName: 'submission-rich-description-base', type: 'long-text', hint: 'HTML accepté. Si ce texte n’est pas fourni, tous les champs suivants seront ignorés. Utilisez celaddon://item?item=ADDON_ID pour les liens vers des extensions et celguide://guide?guide=ARTICLE_ID pour les liens vers des articles', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/base' },
+    { key: 'rich_description_notes', display: 'Notes', elementName: 'submission-rich-description-notes', type: 'long-text-list', hint: 'HTML accepté', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/notes' },
+    { key: 'rich_description_note_type', display: 'Type de note', elementName: 'submission-rich-description-note-type', type: 'text-select', values: [{ name: 'Note', id: 'note' }, { name: 'Important', id: 'important' }, { name: 'Avertissement', id: 'warning' }], hint: 'Type de notes, utilisé uniquement si des notes sont présentes. Les notes importantes auront un fond jaune et les avertissements un fond rouge', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/note_type' },
+    { key: 'rich_description_cover_image', display: 'Image de couverture', elementName: 'submission-rich-description-cover-image', type: 'file', hint: 'Obligatoire lorsqu’une description enrichie est fournie', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image', fileExtension: 'jpg' },
+    { key: 'rich_description_cover_image_caption', display: 'Légende de l’image de couverture', elementName: 'submission-rich-description-cover-image-caption', type: 'long-text', hint: 'HTML accepté', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/cover_image' },
+    { key: 'rich_description_detail_images', display: 'Images de détail', elementName: 'submission-rich-description-detail-images', type: 'file-list', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', fileExtension: 'jpg' },
+    { key: 'rich_description_detail_image_captions', display: 'Légendes des images de détail', elementName: 'submission-rich-description-detail-image-captions', type: 'long-text-list', hint: 'HTML accepté. Légendes des images de détail ci-dessus ; respectez le même ordre que les images. Si une image n’a pas besoin de légende, laissez le champ correspondant vide', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/detail_image_', listFileMode: 'separate' },
+    { key: 'rich_description_youtube_ids', display: 'Identifiants YouTube', elementName: 'submission-rich-description-youtube-ids', type: 'short-text-list', hint: 'Identifiants des vidéos YouTube', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/youtube_ids' },
+    { key: 'rich_description_additional_leading', display: 'Contenu d’introduction supplémentaire', elementName: 'submission-rich-description-additional-leading', type: 'long-text', hint: 'HTML accepté. Sera inséré après l’image de couverture', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_leading', fileExtension: 'html' },
+    { key: 'rich_description_additional_trailing', display: 'Contenu final supplémentaire', elementName: 'submission-rich-description-additional-trailing', type: 'long-text', hint: 'HTML accepté. Sera inséré à la fin', targetCheckBox: ['submission-remove', 'submission-remove-rich-description', 'submission-rich-description'], targetCheckBoxValue: [false, false, true], overrideFilename: 'rich_description/additional_trailing', fileExtension: 'html' },
+  ]
+  const submissionForm = document.getElementById('addon-submission-form');
+  // Clear all children
+  submissionForm.innerHTML = '';
+  const submitButton = document.getElementById('addon-submit-button');
+  const submissionStatus = document.getElementById('addon-submission-status');
+  const submissionProgress = document.getElementById('addon-submission-progress');
+  async function uploadZip() {
+    CelestiaCloudKitManager.page.hideError();
+    let zip = new JSZip();
+    for (var i = 0; i < submissionElements.length; i++) {
+      const element = submissionElements[i];
+      if (element.ignored) continue;
+      if (document.getElementById(element.elementName).style.display == 'none') continue;
+      var filename = element.key;
+      if (element.overrideFilename)
+        filename = element.overrideFilename;
+
+      switch (element.type) {
+      case 'short-text':
+      case 'long-text':
+      case 'reference':
+      case 'int':
+        var input = document.getElementById(element.elementName);
+        if (input.value.length != 0) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.value);
+        }
+        break;
+      case 'reference-select':
+      case 'text-select':
+        var input = document.getElementById(element.elementName);
+        if (input.selectedIndex >= 0) {
+          const value = input.options[input.selectedIndex].value;
+          if (value.length != 0 && value != 'none') {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, input.value);
+          }
+        }
+        break;
+      case 'file':
+      case 'file-list':
+        var input = document.getElementById(element.elementName);
+        if (input.files.length > 0) {
+          if (element.type == 'file-list') {
+            for (var j = 0; j < input.files.length; j++) {
+              zip.file(`${filename}${j}.${element.fileExtension}`, input.files[j]);
+            }
+          } else {
+            zip.file(`${filename}.${element.fileExtension}`, input.files[0]);
+          }
+        }
+        break;
+      case 'date':
+        var input = document.getElementById(element.elementName);
+        if (input.valueAsDate != null) {
+          var fullFilename = filename;
+          if (element.fileExtension)
+            fullFilename = `${filename}.${element.fileExtension}`;
+          else
+            fullFilename = `${filename}.txt`;
+          zip.file(fullFilename, input.valueAsDate.toISOString().substr(0, 19).replaceAll('-', '/').replaceAll('T', ' '));
+        }
+        break;
+      case 'checkbox':
+        if (element.fileExtension)
+          fullFilename = `${filename}.${element.fileExtension}`;
+        else
+          fullFilename = `${filename}.txt`;
+        var input = document.getElementById(element.elementName);
+        var output = element.fileContentProvider(input.checked);
+        if (output) {
+          zip.file(fullFilename, output);
+        }
+        break;
+      case 'short-text-list':
+      case 'long-text-list':
+        var index = 0;
+        var el = document.getElementById(`${element.elementName}${index}`);
+        var array = [];
+        while (el != null) {
+          array.push(el.value);
+          index += 1;
+          el = document.getElementById(`${element.elementName}${index}`);
+        }
+        if (array.length > 0) {
+          if (element.listFileMode == 'separate') {
+            for (var j = 0; j < array.length; j++) {
+              var fullFilename = filename;
+              if (element.fileExtension)
+                fullFilename = `${filename}${j}.${element.fileExtension}`;
+              else
+                fullFilename = `${filename}${j}.txt`;
+              zip.file(fullFilename, array[j]);
+            }
+          } else {
+            var fullFilename = filename;
+            if (element.fileExtension)
+              fullFilename = `${filename}.${element.fileExtension}`;
+            else
+              fullFilename = `${filename}.txt`;
+            zip.file(fullFilename, array.join('\n'));
+          }
+        }
+        break;
+      default:
+        break;
+      }
+    }
+    submitButton.disabled = true;
+    CelestiaCloudKitManager.page.setStatusKind('info');
+    submissionStatus.style.display = 'block';
+    submissionStatus.innerText = 'Création du fichier ZIP...';
+    zip.generateAsync({ type: "blob" }).then(async function(content) {
+      function uuidv4() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+      }
+      const filename = `${uuidv4()}.txt`;
+      try {
+        submissionStatus.innerText = 'Demande de l’URL d’envoi...';
+        const token = GitHubManager.accessToken;
+        if (!token) {
+          throw new Error('Vous n’êtes pas connecté à GitHub');
+        }
+        const presignResponse = await fetch(`/api/2/helpers/submit-addon-get-upload-url?accessToken=${encodeURIComponent(token)}`);
+        if (!presignResponse.ok) {
+          throw new Error(`Impossible d’obtenir l’URL d’envoi : ${presignResponse.status}`);
+        }
+        const presignData = await presignResponse.json();
+        const uploadUrl = presignData.uploadUrl || (presignData.info && presignData.info.uploadUrl);
+        const downloadUrl = presignData.downloadUrl || (presignData.info && presignData.info.downloadUrl);
+        if (!uploadUrl || !downloadUrl) {
+          throw new Error('Réponse contenant l’URL d’envoi invalide');
+        }
+
+        submissionStatus.innerText = 'Envoi de l’extension...';
+        await new Promise(function(resolve, reject) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('PUT', uploadUrl);
+          xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+          submissionProgress.style.display = 'block';
+          submissionProgress.value = 0;
+          xhr.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+              const percent = Math.round((event.loaded / event.total) * 100);
+              submissionProgress.value = percent;
+              submissionStatus.innerText = `Envoi de l’extension... ${percent}%`;
+            }
+          };
+          xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve();
+            } else {
+              reject(new Error(`Impossible d’envoyer l’extension : ${xhr.status}`));
+            }
+          };
+          xhr.onerror = function() {
+            reject(new Error('Impossible d’envoyer l’extension : erreur réseau'));
+          };
+          xhr.send(content);
+        });
+        submissionProgress.style.display = 'none';
+
+        submissionStatus.innerText = 'Création de la pull request...';
+        GitHubManager.submitByCreatePullRequest(filename, downloadUrl, submissionStatus);
+      } catch (e) {
+        submissionStatus.style.display = 'none';
+        submissionProgress.style.display = 'none';
+        submitButton.disabled = false;
+        CelestiaCloudKitManager.page.showError(e);
+      }
+    });
+  }
+  submitButton.onclick = async function() {
+    await uploadZip();
+  }
+  for (var i = 0; i < submissionElements.length; i++) {
+    const controls = [];
+    const element = submissionElements[i];
+    const fieldGroup = document.createElement('div');
+    fieldGroup.classList.add('field-group');
+    const label = document.createElement('label');
+    label.classList.add('form-label');
+    label.id = `${element.elementName}-label`;
+    label.htmlFor = element.elementName;
+    const labelContent = document.createTextNode(`${element.display}:`);
+    label.appendChild(labelContent);
+    controls.push(label);
+    switch (element.type) {
+    case 'short-text':
+    case 'reference':
+    case 'int':
+      var input = document.createElement('input');
+      input.classList.add('form-control');
+      if (element.type == 'int') {
+        input.type = 'number';
+        input.step = '1';
+      } else {
+        input.type = 'text';
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'reference-select':
+    case 'text-select':
+      var input = document.createElement('select');
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      for (var j = 0; j < element.values.length; j++) {
+        var value = element.values[j];
+        var option = document.createElement('option');
+        option.value = value.id;
+        option.innerText = value.name;
+        input.appendChild(option);
+      }
+      controls.push(input);
+      break;
+    case 'long-text':
+      var input = document.createElement('textarea');
+      input.classList.add('form-control');
+      input.style.resize = 'none';
+      input.id = element.elementName;
+      input.name = element.elementName;
+      input.rows = '4';
+      controls.push(input);
+      break;
+    case 'short-text-list':
+    case 'long-text-list':
+      const container = document.createElement('div');
+      container.classList.add('form-list');
+      container.setAttribute('role', 'group');
+      container.setAttribute('aria-labelledby', label.id);
+      container.id = element.elementName;
+      container.name = element.elementName;
+      const addButton = document.createElement('button');
+      addButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+      addButton.type = 'button';
+      addButton.setAttribute('aria-label', `Ajouter un élément : ${element.display}`);
+      addButton.id = `${element.elementName}-plus`;
+      addButton.name = `${element.elementName}-plus`;
+      addButton.appendChild(CelestiaCloudKitManager.page.createListIcon(true));
+      addButton.onclick = function() {
+        var div = document.createElement('div');
+        div.classList.add('action-row');
+        var minusButton = document.createElement('button');
+        minusButton.type = 'button';
+        minusButton.setAttribute('aria-label', `Supprimer un élément : ${element.display}`);
+        var baseName = `${element.elementName}${container.children.length - 1}`;
+        minusButton.id = `${baseName}-minus`;
+        minusButton.name = `${baseName}-minus`;
+        minusButton.classList.add('button-outline', 'small-button-outline', 'button-icon');
+        minusButton.appendChild(CelestiaCloudKitManager.page.createListIcon(false));
+        minusButton.onclick = function() {
+          container.removeChild(div);
+          for (var i = 0; i < container.children.length - 1; i++) {
+            const child = container.children[i];
+            var input = element.type == 'long-text-list' ? child.getElementsByTagName('textarea')[0] : child.getElementsByTagName('input')[0];
+            var minusButton = child.getElementsByTagName('button')[0];
+            var newBaseName = `${element.elementName}${i}`;
+            input.id = newBaseName;
+            input.name = newBaseName;
+            minusButton.id = `${newBaseName}-minus`;
+            minusButton.name = `${newBaseName}-minus`;
+          }
+        };
+        if (element.type == 'long-text-list') {
+          var newInput =  document.createElement('textarea')
+          newInput.classList.add('form-control');
+          newInput.style.resize = 'none';
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.rows = '4';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        } else {
+          var newInput = document.createElement('input');
+          newInput.classList.add('form-control');
+          newInput.setAttribute('aria-label', element.display);
+          if (element.hint) newInput.setAttribute('aria-describedby', `${element.elementName}-hint`);
+          newInput.type = 'text';
+          newInput.id = baseName;
+          newInput.name = baseName;
+          div.appendChild(newInput);
+        }
+        div.appendChild(minusButton);
+        container.insertBefore(div, addButton);
+      };
+      container.appendChild(addButton);
+      controls.push(container);
+      break;
+    case 'date':
+      var input = document.createElement('input');
+      input.type = 'date';
+      input.classList.add('form-control');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'checkbox':
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.classList.add('form-check');
+      fieldGroup.classList.add('field-group-check');
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    case 'file':
+    case 'file-list':
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.classList.add('form-file');
+      if (element.type == 'file-list') {
+        input.multiple = true;
+      }
+      input.id = element.elementName;
+      input.name = element.elementName;
+      controls.push(input);
+      break;
+    default:
+      break;
+    }
+    if (element.hint) {
+      const p = document.createElement('p');
+      p.id = `${element.elementName}-hint`;
+      p.classList.add('form-hint');
+      p.appendChild(document.createTextNode(element.hint));
+      const field = controls.find(control => control.id === element.elementName);
+      if (field) field.setAttribute('aria-describedby', p.id);
+      controls.push(p);
+    }
+
+    for (var j = 0; j < controls.length; j++) {
+      fieldGroup.appendChild(controls[j]);
+    }
+    submissionForm.appendChild(fieldGroup);
+
+    if (element.targetCheckBox || element.targetSelect) {
+      const checkboxes = [];
+      const checkboxValues = [];
+      const selects = [];
+      const selectValues = [];
+      if (Array.isArray(element.targetCheckBox)) {
+        for (var j = 0; j < element.targetCheckBox.length; j++) {
+          checkboxes.push(document.getElementById(element.targetCheckBox[j]));
+          checkboxValues.push(element.targetCheckBoxValue[j]);
+        }
+      } else if (element.targetCheckBox) {
+        checkboxes.push(document.getElementById(element.targetCheckBox));
+        checkboxValues.push(element.targetCheckBoxValue);
+      }
+      if (Array.isArray(element.targetSelect)) {
+        for (var j = 0; j < element.targetSelect.length; j++) {
+          selects.push(document.getElementById(element.targetSelect[j]));
+          if (Array.isArray(targetSelectValue[j])) {
+            selectValues.push(element.targetSelectValue[j]);
+          } else {
+            selectValues.push([element.targetSelectValue[j]])
+          }
+        }
+      } else if (element.targetSelect) {
+        selects.push(document.getElementById(element.targetSelect));
+        if (Array.isArray(element.targetSelectValue)) {
+          selectValues.push(element.targetSelectValue);
+        } else {
+          selectValues.push([element.targetSelectValue])
+        }
+      }
+
+      function updateControlVisibility() {
+        let allSatisfy = true;
+        for (var j = 0; j < checkboxes.length; j++) {
+          if (checkboxes[j].checked != checkboxValues[j]) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < selects.length; j++) {
+          if (!selectValues[j].includes(selects[j].value)) {
+            allSatisfy = false;
+            break;
+          }
+        }
+        for (var j = 0; j < controls.length; j++) {
+          controls[j].style.display = allSatisfy ? '' : 'none';
+        }
+        fieldGroup.style.display = allSatisfy ? '' : 'none';
+      }
+
+      updateControlVisibility();
+
+      for (var j = 0; j < checkboxes.length; j++) {
+        checkboxes[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+
+      for (var j = 0; j < selects.length; j++) {
+        selects[j].addEventListener('change', function() {
+          updateControlVisibility();
+        });
+      }
+    }
+  }
+};
+</script>
+<script>
+  GitHubManager = {};
+  const githubSignInElement = document.getElementById('github-sign-in-button-button');
+  githubSignInElement.onclick = function() {
+    window.location.href = 'https://github.com/login/oauth/authorize?client_id=1cfca660a17fe68fdfdf&scope=repo';
+  };
+  GitHubManager.importWithRetry = async function(urls, attempts) {
+    const list = Array.isArray(urls) ? urls : [urls];
+    let lastError = null;
+    for (var attempt = 0; attempt < (attempts || 3); attempt++) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          return await import(list[i]);
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      // Back off briefly before retrying (300ms, 600ms, ...).
+      await new Promise(function(resolve) { setTimeout(resolve, 300 * (attempt + 1)); });
+    }
+    throw lastError || new Error('Impossible d’importer le module');
+  };
+  GitHubManager.onPageLoaded = async function() {
+    const codeParam = new URL(location.href).searchParams.get("code");
+    if (codeParam) {
+      // remove ?code=... from URL
+      const path = location.pathname + location.search.replace(/\b(code|state)=\w+/g, "").replace(/[?&]+$/, "");
+      history.replaceState({}, "", path);
+      const response = await fetch("/api/2/helpers/submit-addon-get-token", { method: "POST", headers: { "content-type": "application/json", }, body: JSON.stringify({ code: codeParam }) });
+      if (!response.ok) {
+        CelestiaCloudKitManager.page.showErrorText(`Erreur réseau : ${response.status}`);
+        return;
+      }
+      const data = await response.json();
+      const token = data.accessToken;
+      GitHubManager.accessToken = token;
+      try {
+        const { Octokit } = await GitHubManager.importWithRetry(
+          "https://esm.sh/@octokit/core@7.0.6?bundle"
+        );
+        const { createPullRequest } = await GitHubManager.importWithRetry(
+          "https://esm.sh/octokit-plugin-create-pull-request@6.0.1?bundle"
+        );
+        const MyOctokit = Octokit.plugin(createPullRequest);
+        const octokit = new MyOctokit({
+          auth: token,
+        });
+        const submitButton = document.getElementById('addon-submit-button');
+        submitButton.disabled = false;
+        GitHubManager.octokit = octokit;
+      } catch (e) {
+        console.error(e);
+        CelestiaCloudKitManager.page.showErrorText('Impossible de charger les composants GitHub. Rechargez la page et réessayez.');
+      }
+    } else {
+      githubSignInElement.parentNode.style.display = '';
+    }
+  };
+
+  GitHubManager.submitByCreatePullRequest = async function(filename, content, submissionStatus) {
+    const prTitle = prompt("Saisissez un titre pour votre pull request", "Mettre à jour l’extension...");
+    if (prTitle == null || prTitle == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `Création de la pull request pour ${filename} annulée`;
+      return;
+    }
+    const prBody = prompt("Saisissez une description pour votre pull request", "...");
+    if (prBody == null || prBody == "") {
+      CelestiaCloudKitManager.page.setStatusKind('warning');
+      submissionStatus.innerText = `Création de la pull request pour ${filename} annulée`;
+      return;
+    }
+    if (!GitHubManager.octokit) {
+      CelestiaCloudKitManager.page.setStatusKind('error');
+      console.error('Vous n’êtes pas connecté à GitHub');
+      submissionStatus.innerText = 'Vous n’êtes pas connecté à GitHub';
+      return;
+    }
+    const path = `pending_zip_url/${filename}`;
+    const pr = await GitHubManager.octokit.createPullRequest({
+      owner: "celestiamobile",
+      repo: "celestia-addon-validator",
+      title: prTitle,
+      body: prBody,
+      head: filename,
+      forceFork: false /* optional: force creating fork even when user has write rights */,
+      changes: [
+        {
+          files: {
+            [path]: content,
+          },
+          commit:
+            "wip",
+        },
+      ],
+    })
+    if (pr && pr.data && pr.data.number) {
+      CelestiaCloudKitManager.page.setStatusKind('success');
+      submissionStatus.innerHTML = `Pull request créée : <a href="https://github.com/celestiamobile/celestia-addon-validator/pull/${pr.data.number}">consulter ici</a>`;
+    } else {
+      CelestiaCloudKitManager.page.showErrorText('Erreur lors de la création de la pull request')
+    }
+  };
+</script>
+<script>
+  window.addEventListener("DOMContentLoaded", async function() {
+    CelestiaCloudKitManager.loadCategories();
+    await GitHubManager.onPageLoaded();
+  });
+</script>
